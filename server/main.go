@@ -4,13 +4,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/saf2k/restaurant-management/server/database"
-	"github.com/saf2k/restaurant-management/server/middleware"
 	"github.com/saf2k/restaurant-management/server/routes"
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
 
 func main() {
 	port := os.Getenv("PORT")
@@ -24,7 +19,7 @@ func main() {
 
 	routes.UserRoutes(router)
 
-	router.Use(middleware.Authentication())
+	// router.Use(middleware.Authentication())
 
 	routes.FoodRoutes(router)
 	routes.InvoiceRoutes(router)
