@@ -7,10 +7,10 @@ import (
 )
 
 type Table struct {
-	ID        primitive.ObjectID `bson:"_id"`
-	Table_id  *string            `json:"table_id" binding:"required" validate:"required,min=2,max=100"`
-	Table_no  *string            `json:"table_no" binding:"required" validate:"required,min=2,max=100"`
-	Table_max *int               `json:"table_max" validate:"required,min=1,max=100"`
-	Create_at time.Time          `json:"create_at"`
-	Update_at time.Time          `json:"update_at"`
+	ID               primitive.ObjectID `bson:"_id"`
+	Number_of_guests *int               `json:"number_of_guests" validate:"required"`
+	Table_number     *int               `json:"table_number" validate:"required"`
+	Create_at        time.Time          `json:"create_at"`
+	Update_at        time.Time          `json:"update_at"`
+	Table_id         string             `json:"table_id"`
 }

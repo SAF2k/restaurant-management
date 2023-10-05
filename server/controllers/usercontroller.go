@@ -124,17 +124,14 @@ func SignUp() gin.HandlerFunc {
 			return
 		}
 
-		// Validate the user struct using the validator
 		if err := validate.Struct(user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
 		user.ID = primitive.NewObjectID()
-		user.Create_at = time.Now()
-		user.Update_at = time.Now()
-
-		// Save the user to your database (not implemented in this example)
+		user.Created_at = time.Now()
+		user.Updated_at = time.Now()
 
 		c.JSON(http.StatusOK, user)
 	}
