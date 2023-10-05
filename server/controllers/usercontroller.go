@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -17,9 +18,25 @@ var userCollection *mongo.Collection = database.OpenCollection(database.Client, 
 
 func GetUsers() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Get all users",
-		})
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		result, err := userCollection.Find(ctx, bson.M{})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Users not found",
+			})
+			return
+		}
+		var allUsers []bson.M
+
+		if err = result.All(ctx, &allUsers); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Users not found",
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, allUsers)
 	}
 }
 
@@ -69,24 +86,24 @@ func DeleteUser() gin.HandlerFunc {
 
 func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var user models.User
+		// var user models.User
 
-		if err := c.ShouldBindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+		// if err := c.ShouldBindJSON(&user); err != nil {
+		// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		// 	return
+		// }
 
-		// Check if the user exists in the simulated database
-		hashedPassword, ok := users[user.Username]
-		if !ok || !VerifyPassword(hashedPassword, HashPassword(user.Password)) {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
-			return
-		}
+		// // Check if the user exists in the simulated database
+		// hashedPassword, ok := users[user.Username]
+		// if !ok || !VerifyPassword(hashedPassword, HashPassword(user.Password)) {
+		// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		// 	return
+		// }
 
-		// Generate a token (you should use a proper token library)
-		token := GenerateToken(user.Username)
+		// // Generate a token (you should use a proper token library)
+		// token := GenerateToken(user.Username)
 
-		c.JSON(http.StatusOK, gin.H{"token": token})
+		// c.JSON(http.StatusOK, gin.H{"token": token})
 	}
 }
 
