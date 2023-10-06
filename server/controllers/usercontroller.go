@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/saf2k/restaurant-management/server/database"
 	"github.com/saf2k/restaurant-management/server/models"
-	"github.com/saf2k/restaurant-management/server/validate"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

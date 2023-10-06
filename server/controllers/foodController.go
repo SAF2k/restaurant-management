@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/saf2k/restaurant-management/server/database"
 	"github.com/saf2k/restaurant-management/server/models"
-	"github.com/saf2k/restaurant-management/server/validate"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,10 +17,7 @@ import (
 
 var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
 
-func toFixed(num float64, precision int) float64 {
-	output := math.Pow(10, float64(precision))
-	return float64(math.Round(num*output)) / output
-}
+var validate = validator.New()
 
 func GetFoods() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -39,10 +36,9 @@ func GetFood() gin.HandlerFunc {
 		err := foodCollection.FindOne(ctx, bson.M{"food_id": foodId}).Decode(&food)
 		defer cancel()
 		if err != nil {
-			c.JSON(400, gin.H{
+			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "Food not found",
 			})
-			return
 		}
 		c.JSON(http.StatusOK, food)
 	}
@@ -51,10 +47,9 @@ func GetFood() gin.HandlerFunc {
 func CreateFood() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
-		defer cancel()
 		var food models.Food
 		var menu models.Menu
-
+		defer cancel()
 		if err := c.BindJSON(&food); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
@@ -70,6 +65,7 @@ func CreateFood() gin.HandlerFunc {
 			return
 		}
 		err := menuCollection.FindOne(ctx, bson.M{"menu_id": food.Menu_id}).Decode(&menu)
+		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Menu not found",
@@ -110,4 +106,13 @@ func DeleteFood() gin.HandlerFunc {
 			"message": "Delete a food",
 		})
 	}
+}
+
+func toFixed(num float64, precision int) float64 {
+	output := math.Pow(10, float64(precision))
+	return float64(round(num*output)) / output
+}
+
+func round(num float64) int {
+	return int(num + math.Copysign(0.5, num))
 }
