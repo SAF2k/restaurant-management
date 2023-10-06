@@ -11,7 +11,7 @@ import (
 )
 
 func DBinstance() *mongo.Client {
-	MongoDb := "mongodb://localhost:27017"
+	MongoDb := "mongodb://localhost:27017/"
 	fmt.Println("MongoDB Running on ", MongoDb)
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(MongoDb))
