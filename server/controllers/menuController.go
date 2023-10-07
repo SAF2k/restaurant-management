@@ -159,8 +159,22 @@ func UpdateMenuItem() gin.HandlerFunc {
 
 func DeleteMenuItem() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Delete a menu item",
-		})
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		menu_id := c.Param("menu_id")
+		defer cancel()
+
+		filter := bson.M{"menu_id": menu_id}
+
+		result, err := menuCollection.DeleteOne(ctx, filter)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Menu item was not deleted",
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, result)
+		defer cancel()
 	}
 }
