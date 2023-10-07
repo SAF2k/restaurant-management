@@ -58,7 +58,7 @@ func GetMenus() gin.HandlerFunc {
 
 func CreateMenuItem() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var ctx, cancel = context.WithTimeout(context.Background(), 50*time.Second)
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 		var menu models.Menu
 
@@ -82,6 +82,8 @@ func CreateMenuItem() gin.HandlerFunc {
 		menu.ID = primitive.NewObjectID()
 		menu.Menu_id = menu.ID.Hex()
 
+		fmt.Println(menu)
+
 		result, insertErr := menuCollection.InsertOne(ctx, menu)
 
 		if insertErr != nil {
@@ -93,7 +95,6 @@ func CreateMenuItem() gin.HandlerFunc {
 			return
 		}
 
-		defer cancel()
 		c.JSON(http.StatusOK, result)
 		defer cancel()
 	}

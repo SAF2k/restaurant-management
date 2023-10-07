@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/saf2k/restaurant-management/server/middleware"
 	"github.com/saf2k/restaurant-management/server/routes"
 )
 
@@ -19,7 +20,7 @@ func main() {
 
 	routes.UserRoutes(router)
 
-	// router.Use(middleware.Authentication())
+	router.Use(middleware.Authentication())
 
 	routes.FoodRoutes(router)
 	routes.InvoiceRoutes(router)
