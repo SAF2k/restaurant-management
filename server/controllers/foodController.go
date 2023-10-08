@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"net/http"
 	"time"
@@ -21,9 +22,25 @@ var validate = validator.New()
 
 func GetFoods() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Get all foods",
-		})
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		result, err := foodCollection.Find(ctx, bson.M{})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Foods not found",
+			})
+			return
+		}
+		var allFoods []bson.M
+
+		if err = result.All(ctx, &allFoods); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Foods not found",
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, allFoods)
 	}
 }
 
@@ -39,6 +56,7 @@ func GetFood() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "Food not found",
 			})
+			return
 		}
 		c.JSON(http.StatusOK, food)
 	}
@@ -94,17 +112,53 @@ func CreateFood() gin.HandlerFunc {
 
 func UpdateFood() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
-		// var food models.Food
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		foodId := c.Param("food_id")
+		var food models.Food
+		defer cancel()
+		if err := c.BindJSON(&food); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
 
+		validationError := validate.Struct(food)
+		if validationError != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": validationError.Error(),
+			})
+			return
+		}
+		food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		var num = toFixed(*food.Price, 2)
+		food.Price = &num
+		result, err := foodCollection.UpdateOne(ctx, bson.M{"food_id": foodId}, bson.M{"$set": food})
+		fmt.Println(food)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Food not found",
+			})
+			return
+		}
+		defer cancel()
+		c.JSON(http.StatusOK, result)
 	}
 }
 
 func DeleteFood() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Delete a food",
-		})
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		foodId := c.Param("food_id")
+		result, err := foodCollection.DeleteOne(ctx, bson.M{"food_id": foodId})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Food not found",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, result)
 	}
 }
 
