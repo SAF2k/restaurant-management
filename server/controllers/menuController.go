@@ -115,13 +115,21 @@ func UpdateMenuItem() gin.HandlerFunc {
 		menuId := c.Param("menu_id")
 		filter := bson.M{"menu_id": menuId}
 
+		if err := menuCollection.FindOne(ctx, filter).Decode(&menu); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Menu not found",
+			})
+			return
+		}
+
 		var updateObj primitive.D
 
 		if menu.Start_Date != nil && menu.End_Date != nil {
-			if !inTimeSpan(*menu.Start_Date, *menu.End_Date, time.Now()) {
+			if inTimeSpan(*menu.Start_Date, *menu.End_Date, time.Now()) {
 				c.JSON(http.StatusInternalServerError, gin.H{
 					"error": "Start date and end date are not valid",
 				})
+				defer cancel()
 				return
 			}
 
@@ -198,6 +206,6 @@ func DeleteMenuItem() gin.HandlerFunc {
 	}
 }
 
-func inTimeSpan(targetTime, startTime, endTime time.Time) bool {
-	return targetTime.After(startTime) && targetTime.Before(endTime)
+func inTimeSpan(start, end, check time.Time) bool {
+	return check.After(start) && check.Before(end)
 }

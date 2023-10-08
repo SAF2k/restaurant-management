@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	"math"
 	"net/http"
 	"time"
@@ -14,6 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
@@ -112,10 +112,11 @@ func CreateFood() gin.HandlerFunc {
 
 func UpdateFood() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
-		foodId := c.Param("food_id")
+		// Get food ID from URL parameter
+		foodID := c.Param("food_id")
+
+		// Parse JSON request into a food struct
 		var food models.Food
-		defer cancel()
 		if err := c.BindJSON(&food); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
@@ -123,26 +124,34 @@ func UpdateFood() gin.HandlerFunc {
 			return
 		}
 
-		validationError := validate.Struct(food)
-		if validationError != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": validationError.Error(),
-			})
-			return
+		// Define the filter to find the food by ID
+		filter := bson.M{"food_id": foodID}
+
+		// Create an update document with the $set operator
+		update := bson.M{
+			"$set": bson.M{
+				"name":       food.Name,
+				"price":      food.Price,
+				"food_image": food.Food_Image,
+				"updated_at": time.Now(),
+			},
 		}
-		food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		var num = toFixed(*food.Price, 2)
-		food.Price = &num
-		result, err := foodCollection.UpdateOne(ctx, bson.M{"food_id": foodId}, bson.M{"$set": food})
-		fmt.Println(food)
+
+		// Define options for the update operation (upsert if the food doesn't exist)
+		opts := options.Update().SetUpsert(true)
+
+		// Perform the update operation
+		_, err := foodCollection.UpdateOne(c.Request.Context(), filter, update, opts)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"message": "Food not found",
+				"error": "Internal server error",
 			})
 			return
 		}
-		defer cancel()
-		c.JSON(http.StatusOK, result)
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Food updated successfully",
+		})
 	}
 }
 
