@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -59,10 +58,12 @@ func GetMenus() gin.HandlerFunc {
 
 func CreateMenuItem() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		// Create a context with a timeout and defer canceling it
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		var menu models.Menu
 
+		// Parse JSON request into a menu struct
+		var menu models.Menu
 		if err := c.BindJSON(&menu); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
@@ -70,6 +71,7 @@ func CreateMenuItem() gin.HandlerFunc {
 			return
 		}
 
+		// Validate the menu struct
 		validationError := validate.Struct(menu)
 		if validationError != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -78,26 +80,25 @@ func CreateMenuItem() gin.HandlerFunc {
 			return
 		}
 
-		menu.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		menu.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		// Calculate the current time
+		now := time.Now()
+		menu.Created_at = now
+		menu.Updated_at = now
+
+		// Generate a new ObjectID and set the Menu_id
 		menu.ID = primitive.NewObjectID()
 		menu.Menu_id = menu.ID.Hex()
 
-		fmt.Println(menu)
-
+		// Insert the menu into the database
 		result, insertErr := menuCollection.InsertOne(ctx, menu)
-
 		if insertErr != nil {
-			msg := fmt.Sprintf("Food item was not created")
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"error":         msg,
-				"error_context": insertErr.Error(),
+				"error": "Error while creating a new menu item",
 			})
 			return
 		}
 
 		c.JSON(http.StatusOK, result)
-		defer cancel()
 	}
 }
 

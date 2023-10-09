@@ -115,6 +115,27 @@ func UpdateFood() gin.HandlerFunc {
 		// Get food ID from URL parameter
 		foodID := c.Param("food_id")
 
+		// Check if food_id is empty or not provided
+		if foodID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "food_id is required",
+			})
+			return
+		}
+
+		// Define the filter to find the food by ID
+		filter := bson.M{"food_id": foodID}
+
+		// Check if the food item with the specified food_id exists
+		var existingFood models.Food
+		err := foodCollection.FindOne(c.Request.Context(), filter).Decode(&existingFood)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": "Food not found",
+			})
+			return
+		}
+
 		// Parse JSON request into a food struct
 		var food models.Food
 		if err := c.BindJSON(&food); err != nil {
@@ -123,9 +144,6 @@ func UpdateFood() gin.HandlerFunc {
 			})
 			return
 		}
-
-		// Define the filter to find the food by ID
-		filter := bson.M{"food_id": foodID}
 
 		// Create an update document with the $set operator
 		update := bson.M{
@@ -137,11 +155,11 @@ func UpdateFood() gin.HandlerFunc {
 			},
 		}
 
-		// Define options for the update operation (upsert if the food doesn't exist)
-		opts := options.Update().SetUpsert(true)
+		// Define options for the update operation
+		opts := options.Update()
 
 		// Perform the update operation
-		_, err := foodCollection.UpdateOne(c.Request.Context(), filter, update, opts)
+		result, err := foodCollection.UpdateOne(c.Request.Context(), filter, update, opts)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Internal server error",
@@ -151,6 +169,7 @@ func UpdateFood() gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Food updated successfully",
+			"result":  result,
 		})
 	}
 }
