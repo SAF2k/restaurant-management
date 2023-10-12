@@ -1,14 +1,14 @@
-import { CalendarDateRangePicker } from "@/components/home-components/date-range-picker";
-import { MainNav } from "@/components/home-components/main-nav";
 import { Overview } from "@/components/home-components/overview";
 import { RecentSales } from "@/components/home-components/resent-sales";
-import { Search } from "@/components/home-components/search";
-import { UserNav } from "@/components/home-components/user-nav";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Metadata } from "next";
-
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -19,16 +19,6 @@ export default function HomePage() {
   return (
     <>
       <div className="flex-row md:flex-col md:flex">
-        <div className="border-b">
-          <div className="flex h-16 items-center px-4">
-            {/* <TeamSwitcher /> */}
-            <MainNav className="mx-6" />
-            <div className="md:ml-auto flex items-center space-x-4">
-              {/* <Search /> */}
-              <UserNav />
-            </div>
-          </div>
-        </div>
         <div className="flex-1 space-y-4 p-2 md:p-8 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
@@ -40,15 +30,13 @@ export default function HomePage() {
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger value="reports" disabled>
+              <TabsTrigger value="analytics">Place Order</TabsTrigger>
+              {/* <TabsTrigger value="reports" disabled>
                 Reports
               </TabsTrigger>
               <TabsTrigger value="notifications" disabled>
                 Notifications
-              </TabsTrigger>
+              </TabsTrigger> */}
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
