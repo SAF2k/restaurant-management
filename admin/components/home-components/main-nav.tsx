@@ -12,7 +12,7 @@ export function MainNav({
       {...props}
     >
       <Link
-        href="/"
+        href="/id"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Overview
