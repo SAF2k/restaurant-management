@@ -9,7 +9,6 @@ const FoodItem: React.FC<FoodItemProps> = ({ food }) => (
   <div key={food.food_id}>
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        {/* <CardTitle className="text-sm font-medium">{food.name}</CardTitle> */}
         <img src={food.food_image} height="fit" width="fit" alt={food.name} />
       </CardHeader>
       <CardContent>
