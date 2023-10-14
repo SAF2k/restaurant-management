@@ -62,6 +62,31 @@ func GetFood() gin.HandlerFunc {
 	}
 }
 
+func GetFoodsByMenu() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		menuId := c.Param("menu_id")
+		var foods []models.Food
+
+		result, err := foodCollection.Find(ctx, bson.M{"menu_id": menuId})
+		defer cancel()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Foods not found",
+			})
+			return
+		}
+
+		if err = result.All(ctx, &foods); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Foods not found",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, foods)
+	}
+}
+
 func CreateFood() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)

@@ -2,35 +2,43 @@
 import { MenuData, getMenu } from "@/actions/get-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useEffect, useState } from "react";
+import FoodCollection from "@/app/(dashboard)/[storeId]/(routes)/food/components/food-collection";
 
 export default function CategoryTab() {
-  const category = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert"];
-
   const [menuData, setMenuData] = useState<MenuData[]>([]);
 
   useEffect(() => {
-    const getMenuData = async () => {
-      const menuData = await getMenu();
-      setMenuData(menuData);
+    const fetchMenuData = async () => {
+      const menuItems: MenuData[] = await getMenu();
+      setMenuData(menuItems);
     };
-    getMenuData();
+    fetchMenuData();
   }, []);
 
-  console.log(menuData);
+  const testData = menuData.map((item) => (
+    <TabsTrigger
+      value={item.category}
+      key={item._id}
+      className="w-full h-12 text-md"
+    >
+      <>
+        {console.log(item.category)}
+        {item.category}
+      </>
+    </TabsTrigger>
+  ));
+
+  console.log(testData);
 
   return (
     <>
-      <Tabs defaultValue={category[0]} className="flex flex-row gap-10">
-        <TabsList className="flex flex-col gap-2 w-60 h-auto py-4">
-          {category.map((item) => (
-            <TabsTrigger key={item} className="w-56 h-12 text-md" value={item}>
-              {item}
-            </TabsTrigger>
-          ))}
+      <Tabs defaultValue={menuData[0]?.category} className="flex flex-row">
+        <TabsList className="flex flex-col gap-2 w-60 h-fit py-4 mr-5">
+          {testData}
         </TabsList>
-        {category.map((item) => (
-          <TabsContent key={item} value={item}>
-            This is a {item} section
+        {menuData.map((item) => (
+          <TabsContent value={item.category} key={item._id}>
+            <FoodCollection id={item._id} />
           </TabsContent>
         ))}
       </Tabs>

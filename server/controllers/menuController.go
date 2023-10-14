@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -89,6 +90,11 @@ func CreateMenuItem() gin.HandlerFunc {
 		menu.ID = primitive.NewObjectID()
 		menu.Menu_id = menu.ID.Hex()
 
+		// Set the "value" field to a lowercase and no-space string of "category"
+		if menu.Category != nil {
+			value := strings.ToLower(strings.ReplaceAll(*menu.Category, " ", ""))
+			menu.Value = &value
+		}
 		// Insert the menu into the database
 		result, insertErr := menuCollection.InsertOne(ctx, menu)
 		if insertErr != nil {
@@ -125,25 +131,16 @@ func UpdateMenuItem() gin.HandlerFunc {
 
 		var updateObj primitive.D
 
-		if menu.Start_Date != nil && menu.End_Date != nil {
-			if inTimeSpan(*menu.Start_Date, *menu.End_Date, time.Now()) {
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"error": "Start date and end date are not valid",
-				})
-				defer cancel()
-				return
-			}
-
-			updateObj = append(updateObj, bson.E{Key: "start_date", Value: menu.Start_Date})
-			updateObj = append(updateObj, bson.E{Key: "end_date", Value: menu.End_Date})
-		}
-
 		if menu.Name != nil {
 			updateObj = append(updateObj, bson.E{Key: "name", Value: menu.Name})
 		}
 
 		if menu.Category != nil {
 			updateObj = append(updateObj, bson.E{Key: "category", Value: menu.Category})
+
+			// Set the "Value" field to a lowercase and no-space string of "category"
+			value := strings.ToLower(strings.ReplaceAll(*menu.Category, " ", ""))
+			updateObj = append(updateObj, bson.E{Key: "value", Value: value})
 		}
 
 		menu.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
@@ -205,8 +202,4 @@ func DeleteMenuItem() gin.HandlerFunc {
 		c.JSON(http.StatusOK, result)
 		defer cancel()
 	}
-}
-
-func inTimeSpan(start, end, check time.Time) bool {
-	return check.After(start) && check.Before(end)
 }

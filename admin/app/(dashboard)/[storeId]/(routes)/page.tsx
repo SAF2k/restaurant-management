@@ -14,21 +14,15 @@ export default function HomePage() {
               <Button>Download</Button>
             </div> */}
           </div>
-          <Tabs defaultValue="overview" className="space-y-4">
+          <Tabs defaultValue="place_order" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="placeorder">Place Order</TabsTrigger>
-              {/* <TabsTrigger value="reports" disabled>
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="notifications" disabled>
-                Notifications
-              </TabsTrigger> */}
+              <TabsTrigger value="place_order">Place Order</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
               <OverviewContent />
             </TabsContent>
-            <TabsContent value="placeorder" className="space-y-4">
+            <TabsContent value="place_order" className="space-y-4">
               <PlaceOrder />
             </TabsContent>
           </Tabs>

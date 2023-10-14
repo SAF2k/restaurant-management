@@ -9,7 +9,7 @@ const FoodItem: React.FC<FoodItemProps> = ({ food }) => (
   <div key={food.food_id}>
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <img src={food.food_image} height="fit" width="fit" alt={food.name} />
+        {/* <img src={food.food_image} height="fit" width="fit" alt={food.name} /> */}
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{food.name}</div>
