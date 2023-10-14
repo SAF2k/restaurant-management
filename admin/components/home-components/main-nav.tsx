@@ -24,6 +24,12 @@ export function MainNav({
         Menu
       </Link>
       <Link
+        href="/id/food"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Food
+      </Link>
+      <Link
         href="/id/table"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
