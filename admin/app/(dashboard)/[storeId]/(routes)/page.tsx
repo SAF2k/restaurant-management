@@ -29,7 +29,7 @@ export default function HomePage() {
               <OverviewContent />
             </TabsContent>
             <TabsContent value="placeorder" className="space-y-4">
-             <PlaceOrder />
+              <PlaceOrder />
             </TabsContent>
           </Tabs>
         </div>

@@ -11,7 +11,7 @@ export interface FoodData {
 export const getFood = async (): Promise<FoodData[]> => {
   try {
     const response = await axios.get("http://localhost:8080/foods");
-    const data = response.data; // Assuming response data is an array
+    const data = response.data;
 
     if (Array.isArray(data)) {
       return data;

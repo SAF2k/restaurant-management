@@ -1,7 +1,7 @@
 import FoodCollection from "./components/food-collection";
 
 
-const MenuPage = () => {
+const FoodPage = () => {
 
   return (
     <FoodCollection />
@@ -9,4 +9,4 @@ const MenuPage = () => {
 };
 
 
-export default MenuPage;
+export default FoodPage;
