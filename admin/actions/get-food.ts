@@ -6,6 +6,7 @@ export interface FoodData {
   price: number;
   food_id: string;
   menu_id: string;
+  menu_name: string;
   food_image: string;
   created_at: string;
 }
@@ -35,6 +36,24 @@ export const getAllFood = async () => {
     return []; // Return an empty array or handle the error as needed
   }
 };
+
+export const getFoodById = async (id: string) => {
+  try {
+    const response = await axios.get("http://localhost:8080/food/" + id);
+    const data = response.data;
+
+    if (Array.isArray(data)) {
+      return data;
+    } else {
+      console.error("Response data is not an array:", data);
+      return [];
+    }
+  } catch (error) {
+    // Handle any potential errors here
+    console.error("Error fetching food data:", error);
+    return []; // Return an empty array or handle the error as needed
+  }
+}
 
 export const getFoodByMenu = async ({
   id,

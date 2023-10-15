@@ -14,5 +14,6 @@ type Food struct {
 	Created_at time.Time          `json:"create_at"`
 	Updated_at time.Time          `json:"update_at"`
 	Food_id    string             `json:"food_id"`
+	Menu_Name  *string            `json:"menu_name"`
 	Menu_id    *string            `json:"menu_id"`
 }

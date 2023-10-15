@@ -108,13 +108,13 @@ func CreateFood() gin.HandlerFunc {
 			return
 		}
 		err := menuCollection.FindOne(ctx, bson.M{"menu_id": food.Menu_id}).Decode(&menu)
-		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Menu not found",
 			})
 			return
 		}
+		food.Menu_Name = menu.Category
 		food.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		food.ID = primitive.NewObjectID()

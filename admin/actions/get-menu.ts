@@ -12,8 +12,6 @@ export const getMenu = async () => {
     const response = await axios.get("http://localhost:8080/menus");
     const data = response.data;
 
-    console.log("data:", data);
-    
     if (Array.isArray(data)) {
       const transformedData = data.map(
         ({ _id, name, category, created_at }) => ({
@@ -23,7 +21,6 @@ export const getMenu = async () => {
           created_at,
         })
       );
-      console.log("transformedData:", transformedData);
 
       return transformedData;
     } else {

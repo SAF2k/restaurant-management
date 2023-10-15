@@ -15,10 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { FoodData } from "@/actions/get-food";
+import { FoodClientProps } from "./client";
 
 interface CellActionProps {
-  data: FoodData;
+  data: FoodClientProps;
 }
 
 export const CellAction = ({ data }: CellActionProps) => {
@@ -36,9 +36,9 @@ export const CellAction = ({ data }: CellActionProps) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/products/${data._id}`);
+      await axios.delete(`http://localhost:8080/food/${data._id}`);
       router.refresh();
-      router.push(`/${params.storeId}/products`);
+      router.push(`/${params.storeId}/food`);
       toast.success("product deleted.");
     } catch (error: any) {
       toast.error(
@@ -73,7 +73,7 @@ export const CellAction = ({ data }: CellActionProps) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/products/${data._id}`)
+              router.push(`/${params.storeId}/food/${data._id}`)
             }
           >
             <Edit className="w-4 h-4 mr-2" />

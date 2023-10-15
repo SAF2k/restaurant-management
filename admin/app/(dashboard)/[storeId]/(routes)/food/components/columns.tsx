@@ -2,28 +2,24 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./data-table";
-import { FoodData } from "@/actions/get-food";
+import { FoodClientProps } from "./client";
 
-export const columns: ColumnDef<FoodData>[] = [
+export const columns: ColumnDef<FoodClientProps>[] = [
   {
     accessorKey: "name",
     header: "Name",
-  },
-  {
-    accessorKey: "isArchived",
-    header: "Archived",
-  },
-  {
-    accessorKey: "isFeatured",
-    header: "Featured",
   },
   {
     accessorKey: "price",
     header: "Price",
   },
   {
-    accessorKey: "menu",
+    accessorKey: "menu_name",
     header: "Menu",
+  },
+  {
+    accessorKey: "created_at",
+    header: "Created At",
   },
   {
     id: "action",

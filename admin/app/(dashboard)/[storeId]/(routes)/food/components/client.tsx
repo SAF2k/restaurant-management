@@ -12,6 +12,15 @@ import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { FoodData, getAllFood } from "@/actions/get-food";
 
+export interface FoodClientProps {
+ _id: string;
+  name: string;
+  price: number;
+  food_id: string;
+  menu_name: string;
+  created_at: string;
+}
+
 
 export const FoodClient = () => {
   const params = useParams();
@@ -29,14 +38,12 @@ export const FoodClient = () => {
   }, []);
 
 
-  const data: FoodData[] = foods.map((item) => ({
+  const data: FoodClientProps[] = foods.map((item) => ({
     _id: item._id, // Use the correct property name
     name: item.name,
     price: item.price,
-    image: item.food_image,
     food_id: item.food_id,
-    food_image: item.food_image,
-    menu_id: item.menu_id,
+    menu_name: item.menu_name,
     created_at: format(new Date(item.created_at), "MMMM do, yyyy"),
   }));
 
