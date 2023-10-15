@@ -46,12 +46,17 @@ func registerRoutes(router *gin.Engine) {
 }
 
 func CorsMiddleware() gin.HandlerFunc {
-	// Create a CORS middleware with default options
-	corsMiddleware := cors.Default()
+	// Create a new CORS middleware with specific options
+	corsConfig := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"}, // Replace with your frontend's origin
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE"},
+		AllowedHeaders:   []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
 
 	return func(c *gin.Context) {
-		// Apply CORS middleware to the context
-		corsMiddleware.HandlerFunc(c.Writer, c.Request)
+		// Apply the customized CORS middleware to the context
+		corsConfig.HandlerFunc(c.Writer, c.Request)
 		c.Next()
 	}
 }

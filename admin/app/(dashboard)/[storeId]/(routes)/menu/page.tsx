@@ -1,9 +1,14 @@
-import MenuCollection from "./components/menu-collection";
+import { MenuClient } from "./components/client";
 
-const MenuPage = () => {
+const MenusPage = () => {
+
   return (
-    <MenuCollection />
-  )
+    <div className="flex-col">
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <MenuClient />
+      </div>
+    </div>
+  );
 };
 
-export default MenuPage;
+export default MenusPage;

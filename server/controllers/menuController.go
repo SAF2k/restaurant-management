@@ -32,10 +32,16 @@ func GetMenu() gin.HandlerFunc {
 			})
 			return
 		}
-		c.JSON(http.StatusOK, menu)
+
+		// Create a MenuResponse with only the desired fields
+		response := models.MenuResponse{
+			Name:     *menu.Name,
+			Category: *menu.Category,
+		}
+
+		c.JSON(http.StatusOK, response)
 	}
 }
-
 func GetMenus() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)

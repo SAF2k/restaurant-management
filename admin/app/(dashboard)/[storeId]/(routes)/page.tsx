@@ -14,7 +14,7 @@ export default function HomePage() {
               <Button>Download</Button>
             </div> */}
           </div>
-          <Tabs defaultValue="place_order" className="space-y-4">
+          <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="place_order">Place Order</TabsTrigger>
