@@ -1,12 +1,15 @@
-import FoodCollection from "./components/food-collection";
+import { FoodClient } from "./components/client";
 
 
-const FoodPage = () => {
+const FoodsPage = () => {
 
   return (
-    <FoodCollection />
+    <div className="flex-col">
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <FoodClient />
+      </div>
+    </div>
   );
 };
 
-
-export default FoodPage;
+export default FoodsPage;

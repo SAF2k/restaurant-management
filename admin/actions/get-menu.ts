@@ -24,7 +24,7 @@ export const getMenu = async () => {
         })
       );
       console.log("transformedData:", transformedData);
-      
+
       return transformedData;
     } else {
       console.error("Response data is not an array:", data);

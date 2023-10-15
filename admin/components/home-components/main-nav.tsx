@@ -39,15 +39,10 @@ export function MainNav({
       label: "Orders",
       active: pathname === `/${params.storeId}/orders`,
     },
-    {
-      href: `/${params.storeId}/settings`,
-      label: "Settings",
-      active: pathname === `/${params.storeId}/settings`,
-    },
   ];
 
   return (
-    <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)} {...props}>
+    <nav className={cn("hidden sm:flex items-center space-x-4 lg:space-x-6", className)} {...props}>
       {routes.map((route) => (
         <Link
           key={route.href}
