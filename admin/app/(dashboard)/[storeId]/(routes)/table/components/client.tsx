@@ -2,38 +2,52 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
+import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
-
 import { Separator } from "@/components/ui/separator";
-import { TableColumn, columns } from "./columns";
+import {  columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
+import { TableData, getAllTable } from "@/actions/get-table";
+import { useEffect, useState } from "react";
 
-interface TableClientProps {
-  data: TableColumn[];
-}
-
-export const TableClient = ({ data }: TableClientProps) => {
+export const TableClient = () => {
   const params = useParams();
   const router = useRouter();
+
+  const [tables, setTables] = useState<TableData[]>([]);
+
+  useEffect(() => {
+    const fetchTableData = async () => {
+      const tableItems: TableData[] = (await getAllTable()) ?? [];
+
+      setTables(tableItems);
+    };
+    fetchTableData();
+  }, []);
+
+   const data = tables.map((item) => ({
+     id: item._id,
+     tableNumber: item.table_number,
+     numberOfGuests: item.number_of_guests,
+     createdAt: format(new Date(item.created_at), "MMMM do, yyyy"),
+   }));
 
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
           title={`Table (${data.length})`}
-          description="Manage billboard for your store."
+          description="Manage table for your store."
         />
-        <Button
-          onClick={() => router.push(`/${params.storeId}/billboards/new`)}
-        >
+        <Button onClick={() => router.push(`/${params.storeId}/table/new`)}>
           <Plus className="w-4 h-4 mr-2" />
           Add New
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="label" columns={columns} data={data} />
+      <DataTable searchKey="tableNumber" columns={columns} data={data} />
     </>
   );
 };

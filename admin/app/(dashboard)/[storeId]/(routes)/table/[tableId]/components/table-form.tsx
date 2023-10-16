@@ -22,54 +22,62 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { MenuData } from "@/actions/get-menu";
+import { TableData } from "@/actions/get-table";
 
 const formSchema = z.object({
-  name: z.string(),
-  category: z.string(),
+  number_of_guests: z.coerce.number().min(1),
+  table_number: z.coerce.number().min(1),
 });
 
-type MenuFormValues = z.infer<typeof formSchema>;
+type TableFormValues = z.infer<typeof formSchema>;
 
-interface MenuFormProps {
-  initialData: MenuData | null;
+interface TableFormProps {
+  initialData: TableData | null;
 }
 
-export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
+export const TableForm: React.FC<TableFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
+
+  console.log(initialData);
+  
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit menu" : "Create menu";
-  const description = initialData ? "Edit a menu." : "Add a new menu";
-  const toastMessage = initialData ? "Menu updated." : "Menu created.";
+  const title = initialData ? "Edit table" : "Create table";
+  const description = initialData ? "Edit a table." : "Add a new table";
+  const toastMessage = initialData ? "Table updated." : "Table created.";
   const action = initialData ? "Save changes" : "Create";
-  
-const form = useForm<MenuFormValues>({
-  resolver: zodResolver(formSchema),
-  defaultValues: initialData
-    ? { ...initialData }
-    : {
-        category: "",
-        name: "",
-      },
-});
 
-  const onSubmit = async (data: MenuFormValues) => {
+  const defaultValues = initialData
+    ? {
+       ...initialData
+      }
+    : {
+        number_of_guests: 0,
+        table_number: 0,
+        id: "",
+      };
+
+  const form = useForm<TableFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
+  });
+
+  const onSubmit = async (data: TableFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `http://localhost:8080/menu/${params.menuId}`,
+          `http://localhost:8080/table/${params.tableId}`,
           data
         );
       } else {
-        await axios.post(`http://localhost:8080/menu`, data);
+        await axios.post(`http://localhost:8080/table`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/menu`);
+      router.push(`/${params.storeId}/table`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error("Something went wrong.");
@@ -81,14 +89,12 @@ const form = useForm<MenuFormValues>({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8080/menu/${params.menuId}`);
+      await axios.delete(`http://localhost:8080/table/${params.tableId}`);
       router.refresh();
-      router.push(`/${params.storeId}/menu`);
-      toast.success("Menu deleted.");
+      router.push(`/${params.storeId}/table`);
+      toast.success("Table deleted.");
     } catch (error: any) {
-      toast.error(
-        "Make sure you removed all categories using this menu first."
-      );
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -125,14 +131,15 @@ const form = useForm<MenuFormValues>({
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="table_number"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Table Number</FormLabel>
                   <FormControl>
                     <Input
+                      type="number"
                       disabled={loading}
-                      placeholder="Menu Name"
+                      placeholder="Table Number"
                       {...field}
                     />
                   </FormControl>
@@ -140,18 +147,17 @@ const form = useForm<MenuFormValues>({
                 </FormItem>
               )}
             />
-          </div>
-          <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="category"
+              name="number_of_guests"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Number of Guests</FormLabel>
                   <FormControl>
                     <Input
+                      type="number"
                       disabled={loading}
-                      placeholder="Menu Category"
+                      placeholder="Number of Guests (2-10)"
                       {...field}
                     />
                   </FormControl>

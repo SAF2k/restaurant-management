@@ -33,9 +33,9 @@ export const CellAction = ({ data }: CellActionProps) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
+      await axios.delete(`http://localhost:8080/table/${data.id}`);
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
+      router.push(`/${params.storeId}/table`);
     } catch (error: any) {
     
     } finally {
@@ -61,7 +61,7 @@ export const CellAction = ({ data }: CellActionProps) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/billboards/${data.id}`)
+              router.push(`/${params.storeId}/table/${data.id}`)
             }
           >
             <Edit className="w-4 h-4 mr-2" />

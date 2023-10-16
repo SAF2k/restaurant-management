@@ -36,7 +36,7 @@ export const CellAction = ({ data }: CellActionProps) => {
     try {
       setLoading(true);
       await axios.delete(
-        `http://localhost:8080/${params.storeId}/menu/${data.id}`
+        `http://localhost:8080/menu/${data.id}`
       );
       router.refresh();
       router.push(`/${params.storeId}/menu`);

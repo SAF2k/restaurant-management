@@ -34,10 +34,11 @@ export function MainNav({
       label: "Table",
       active: pathname === `/${params.storeId}/table`,
     },
+
     {
-      href: `/${params.storeId}/orders`,
-      label: "Orders",
-      active: pathname === `/${params.storeId}/orders`,
+      href: `/${params.storeId}/skeleton`,
+      label: "Skeleton",
+      active: pathname === `/${params.storeId}/skeleton`,
     },
   ];
 

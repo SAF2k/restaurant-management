@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
-
 import {
   Select,
   SelectContent,
@@ -35,7 +34,7 @@ import { FoodData } from "@/actions/get-food";
 
 const formSchema = z.object({
   name: z.string().min(1),
-  food_image: z.string().url().optional().or(z.literal('')),
+  food_image: z.string().url().optional().or(z.literal("")),
   price: z.coerce.number().min(1),
   menu_id: z.string().min(1),
 });
@@ -43,16 +42,11 @@ const formSchema = z.object({
 type FoodFormValues = z.infer<typeof formSchema>;
 
 interface FoodFormProps {
-  initialData:
-    | (FoodData)
-    | null;
-  menus: MenuData[]
+  initialData: FoodData | null;
+  menus: MenuData[];
 }
 
-export const FoodForm: React.FC<FoodFormProps> = ({
-  initialData,
-    menus,
-}) => {
+export const FoodForm: React.FC<FoodFormProps> = ({ initialData, menus }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -66,13 +60,15 @@ export const FoodForm: React.FC<FoodFormProps> = ({
 
   const defaultValues = initialData
     ? {
-        ...initialData,
-        price: parseFloat(String(initialData?.price)),
+        name: initialData.name,
+        image_url: initialData.food_image,
+        price: initialData.price,
+        menu_id: initialData.menu_id,
       }
     : {
         name: "",
         image_url: "",
-        price: NaN,
+        price: 0,
         menu_id: "",
       };
 
@@ -152,7 +148,6 @@ export const FoodForm: React.FC<FoodFormProps> = ({
                     <Input
                       disabled={loading}
                       placeholder="Food name"
-                      defaultValue={field.value}
                       {...field}
                     />
                   </FormControl>
@@ -171,7 +166,6 @@ export const FoodForm: React.FC<FoodFormProps> = ({
                       type="number"
                       disabled={loading}
                       placeholder="9.99"
-                      defaultValue={field.value}
                       {...field}
                     />
                   </FormControl>
@@ -222,7 +216,6 @@ export const FoodForm: React.FC<FoodFormProps> = ({
                       disabled={loading}
                       placeholder="https://example.com/image.png"
                       {...field}
-                      defaultValue={field.value}
                     />
                   </FormControl>
                   <FormMessage />

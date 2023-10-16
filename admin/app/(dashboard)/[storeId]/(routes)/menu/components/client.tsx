@@ -9,22 +9,13 @@ import { Separator } from "@/components/ui/separator";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
-import { useEffect, useState } from "react";
-import { MenuData, getMenu } from "@/actions/get-menu";
+import { getMenu } from "@/actions/get-menu";
 
-export const MenuClient = () => {
+export const MenuClient = async () => {
   const params = useParams();
   const router = useRouter();
 
-  const [menuData, setMenuData] = useState<MenuData[]>([]);
-
-  useEffect(() => {
-    const fetchMenuData = async () => {
-      const menuItems: MenuData[] = await getMenu();
-      setMenuData(menuItems);
-    };
-    fetchMenuData();
-  }, []);
+  const menuData = await getMenu();
 
   const data = menuData.map((item) => ({
     id: item._id,

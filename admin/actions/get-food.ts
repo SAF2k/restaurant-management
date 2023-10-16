@@ -42,12 +42,7 @@ export const getFoodById = async (id: string) => {
     const response = await axios.get("http://localhost:8080/food/" + id);
     const data = response.data;
 
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      console.error("Response data is not an array:", data);
-      return [];
-    }
+    return data;
   } catch (error) {
     // Handle any potential errors here
     console.error("Error fetching food data:", error);

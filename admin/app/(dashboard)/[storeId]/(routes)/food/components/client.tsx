@@ -13,14 +13,13 @@ import { columns } from "./columns";
 import { FoodData, getAllFood } from "@/actions/get-food";
 
 export interface FoodClientProps {
- _id: string;
+  _id: string;
   name: string;
   price: number;
   food_id: string;
   menu_name: string;
   created_at: string;
 }
-
 
 export const FoodClient = () => {
   const params = useParams();
@@ -36,7 +35,6 @@ export const FoodClient = () => {
     };
     fetchMenuData();
   }, []);
-
 
   const data: FoodClientProps[] = foods.map((item) => ({
     _id: item._id, // Use the correct property name

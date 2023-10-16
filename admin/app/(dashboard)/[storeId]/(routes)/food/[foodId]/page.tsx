@@ -1,41 +1,16 @@
-"use client";
-
-import axios from "axios";
+import { getFoodById } from "@/actions/get-food";
 import { FoodForm } from "./components/food-form";
-import { useEffect, useState } from "react";
-import { FoodData, getFoodById } from "@/actions/get-food";
-import { MenuData } from "@/actions/get-menu";
-import toast from "react-hot-toast";
+import { getMenu } from "@/actions/get-menu";
 
-const FoodPage = ({ params }: { params: { foodId: string } }) => {
-  const [food, setFood] = useState<FoodData | null>(null);
-  const [menus, setMenus] = useState<MenuData[]>([]);
+const FoodPage = async ({ params }: { params: { foodId: string } }) => {
+  const foodData = async () => {
+    if (params.foodId === "new") return null;
+    const food = await getFoodById(params.foodId);
+    return food;
+  };
+  const menus = await getMenu();
 
-  useEffect(() => {
-    const fetchFood = async () => {
-      try {
-        if (params.foodId == "new") {
-          setFood(null);
-        } else {
-          const foodData: any = await getFoodById(params.foodId);
-          setFood(foodData);
-        }
-      } catch (error: any) {
-        toast.error("Something went wrong.");
-      }
-    };
-    const fetchMenus = async () => {
-      try {
-        const { data } = await axios.get(`http://localhost:8080/menus`);
-        setMenus(data);
-      } catch (error: any) {
-        toast.error("Something went wrong.");
-      }
-    };
-    fetchMenus();
-
-    fetchFood();
-  }, [params.foodId]);
+  const food = await foodData();
 
   return (
     <div className="flex-col">

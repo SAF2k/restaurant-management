@@ -5,6 +5,7 @@ export interface MenuData {
   name: string;
   category: string;
   created_at: string;
+  value: string;
 }
 
 export const getMenu = async () => {
@@ -14,10 +15,11 @@ export const getMenu = async () => {
 
     if (Array.isArray(data)) {
       const transformedData = data.map(
-        ({ _id, name, category, created_at }) => ({
+        ({ _id, name, category, value, created_at }) => ({
           _id,
           name,
           category,
+          value,
           created_at,
         })
       );
@@ -41,6 +43,6 @@ export const getMenuById = async (id: string) => {
     return data;
   } catch (error) {
     console.error("Error fetching menu data:", error);
-    return ;
+    return;
   }
-}
+};
