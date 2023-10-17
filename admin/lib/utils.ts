@@ -9,3 +9,7 @@ export const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "INR",
 });
+
+export function formatNumber(number: number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}

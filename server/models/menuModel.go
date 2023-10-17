@@ -13,7 +13,6 @@ type Menu struct {
 	Created_at time.Time          `json:"create_at"`
 	Updated_at time.Time          `json:"update_at"`
 	Menu_id    string             `json:"menu_id"`
-	Value      *string            `json:"value"`
 }
 
 type MenuResponse struct {

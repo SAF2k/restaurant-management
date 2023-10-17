@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +14,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+type MenuUpdateRequest struct {
+	Name     string `json:"name" binding:"min=2,max=100"`
+	Category string `json:"category" binding:"min=2,max=100"`
+}
 
 var menuCollection *mongo.Collection = database.OpenCollection(database.Client, "menu")
 
@@ -96,11 +100,6 @@ func CreateMenuItem() gin.HandlerFunc {
 		menu.ID = primitive.NewObjectID()
 		menu.Menu_id = menu.ID.Hex()
 
-		// Set the "value" field to a lowercase and no-space string of "category"
-		if menu.Category != nil {
-			value := strings.ToLower(strings.ReplaceAll(*menu.Category, " ", ""))
-			menu.Value = &value
-		}
 		// Insert the menu into the database
 		result, insertErr := menuCollection.InsertOne(ctx, menu)
 		if insertErr != nil {
@@ -116,61 +115,67 @@ func CreateMenuItem() gin.HandlerFunc {
 
 func UpdateMenuItem() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
-		var menu models.Menu
-		defer cancel()
-		if err := c.BindJSON(&menu); err != nil {
+		// Get menu ID from URL parameter
+		menuID := c.Param("menu_id")
+
+		// Check if menu_id is empty or not provided
+		if menuID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "menu_id is required",
+			})
+			return
+		}
+
+		// Parse JSON request into a menu update request struct
+		var updateReq MenuUpdateRequest
+		if err := c.ShouldBindJSON(&updateReq); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
 			return
 		}
-		menuId := c.Param("menu_id")
-		filter := bson.M{"menu_id": menuId}
 
-		if err := menuCollection.FindOne(ctx, filter).Decode(&menu); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
+		// Define the filter to find the menu by ID
+		filter := bson.M{"menu_id": menuID}
+
+		// Check if the menu item with the specified menu_id exists
+		var existingMenu models.Menu
+		err := menuCollection.FindOne(c.Request.Context(), filter).Decode(&existingMenu)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{
 				"error": "Menu not found",
 			})
 			return
 		}
 
-		var updateObj primitive.D
-
-		if menu.Name != nil {
-			updateObj = append(updateObj, bson.E{Key: "name", Value: menu.Name})
+		// Set the updated fields
+		updateFields := bson.M{
+			"name":       updateReq.Name,
+			"category":   updateReq.Category,
+			"updated_at": time.Now(),
 		}
 
-		if menu.Category != nil {
-			updateObj = append(updateObj, bson.E{Key: "category", Value: menu.Category})
-
-			// Set the "Value" field to a lowercase and no-space string of "category"
-			value := strings.ToLower(strings.ReplaceAll(*menu.Category, " ", ""))
-			updateObj = append(updateObj, bson.E{Key: "value", Value: value})
+		// Create an update document with the $set operator
+		update := bson.M{
+			"$set": updateFields,
 		}
 
-		menu.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		updateObj = append(updateObj, bson.E{Key: "updated_at", Value: menu.Updated_at})
+		// Define options for the update operation
+		opts := options.Update()
 
-		upsert := true
-
-		opt := options.UpdateOptions{
-			Upsert: &upsert,
-		}
-
-		result, err := menuCollection.UpdateOne(ctx, filter, bson.D{
-			{Key: "$set", Value: updateObj},
-		}, &opt)
-
+		// Perform the update operation
+		result, err := menuCollection.UpdateOne(c.Request.Context(), filter, update, opts)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
+				"error": "Internal server error",
 			})
 			return
 		}
 
-		c.JSON(http.StatusOK, result)
-		defer cancel()
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Menu updated successfully",
+			"result":  result,
+		})
 	}
 }
 

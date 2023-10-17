@@ -9,18 +9,28 @@ import { Separator } from "@/components/ui/separator";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
-import { getMenu } from "@/actions/get-menu";
+import { MenuData, getMenus } from "@/actions/get-menu";
+import { useEffect, useState } from "react";
 
-export const MenuClient = async () => {
+export const MenuClient = () => {
   const params = useParams();
   const router = useRouter();
+  
+  const [menuData, setMenuData] = useState<MenuData[]>([]);
 
-  const menuData = await getMenu();
+  useEffect(() => {
+    const fetchData = async () => {
+      const menuItems : MenuData[] | undefined = (await getMenus()) ?? [];
+      setMenuData(menuItems);
+    };
+    fetchData();
+  }, []);
 
-  const data = menuData.map((item) => ({
-    id: item._id,
-    label: item.category,
-    createdAt: format(new Date(item.created_at), "MMMM do, yyyy"),
+  const data:MenuData[] = menuData.map((item) => ({
+    _id: item._id,
+    name: item.name,
+    category: item.category,
+    created_at: format(new Date(item.created_at), "MMMM do, yyyy"),
   }));
 
   return (
@@ -30,15 +40,13 @@ export const MenuClient = async () => {
           title={`Menu (${data.length})`}
           description="Manage menu for your store."
         />
-        <Button
-          onClick={() => router.push(`/${params.storeId}/menu/new`)}
-        >
+        <Button onClick={() => router.push(`/${params.storeId}/menu/new`)}>
           <Plus className="w-4 h-4 mr-2" />
           Add New
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="label" columns={columns} data={data} />
+      <DataTable searchKey="category" columns={columns} data={data} />
     </>
   );
 };

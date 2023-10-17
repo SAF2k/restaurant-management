@@ -37,7 +37,7 @@ export const FoodClient = () => {
   }, []);
 
   const data: FoodClientProps[] = foods.map((item) => ({
-    _id: item._id, // Use the correct property name
+    _id: item.ID, // Use the correct property name
     name: item.name,
     price: item.price,
     food_id: item.food_id,

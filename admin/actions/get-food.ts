@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export interface FoodData {
-  _id: string;
+  ID: string;
   name: string;
   price: number;
   food_id: string;
@@ -9,6 +9,7 @@ export interface FoodData {
   menu_name: string;
   food_image: string;
   created_at: string;
+  quantity: number;
 }
 interface IFoodByMenu {
   id: string;

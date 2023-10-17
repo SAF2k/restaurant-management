@@ -1,6 +1,6 @@
 import { getFoodById } from "@/actions/get-food";
 import { FoodForm } from "./components/food-form";
-import { getMenu } from "@/actions/get-menu";
+import { getMenus } from "@/actions/get-menu";
 
 const FoodPage = async ({ params }: { params: { foodId: string } }) => {
   const foodData = async () => {
@@ -8,7 +8,7 @@ const FoodPage = async ({ params }: { params: { foodId: string } }) => {
     const food = await getFoodById(params.foodId);
     return food;
   };
-  const menus = await getMenu();
+  const menus = await getMenus();
 
   const food = await foodData();
 

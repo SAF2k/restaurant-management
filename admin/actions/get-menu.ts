@@ -5,21 +5,19 @@ export interface MenuData {
   name: string;
   category: string;
   created_at: string;
-  value: string;
 }
 
-export const getMenu = async () => {
+export const getMenus = async () => {
   try {
     const response = await axios.get("http://localhost:8080/menus");
     const data = response.data;
 
     if (Array.isArray(data)) {
       const transformedData = data.map(
-        ({ _id, name, category, value, created_at }) => ({
+        ({ _id, name, category, created_at }) => ({
           _id,
           name,
           category,
-          value,
           created_at,
         })
       );

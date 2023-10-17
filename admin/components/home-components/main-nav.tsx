@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 
@@ -9,7 +9,6 @@ export function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-
   const pathname = usePathname();
   const params = useParams();
 
@@ -18,6 +17,11 @@ export function MainNav({
       href: `/${params.storeId}`,
       label: "Overview",
       active: pathname === `/${params.storeId}`,
+    },
+    {
+      href: `/${params.storeId}/placeorder`,
+      label: "Place Order",
+      active: pathname === `/${params.storeId}/placeorder`,
     },
     {
       href: `/${params.storeId}/menu`,
@@ -34,7 +38,6 @@ export function MainNav({
       label: "Table",
       active: pathname === `/${params.storeId}/table`,
     },
-
     {
       href: `/${params.storeId}/skeleton`,
       label: "Skeleton",
@@ -43,7 +46,13 @@ export function MainNav({
   ];
 
   return (
-    <nav className={cn("hidden sm:flex items-center space-x-4 lg:space-x-6", className)} {...props}>
+    <nav
+      className={cn(
+        "hidden sm:flex items-center space-x-4 lg:space-x-6",
+        className
+      )}
+      {...props}
+    >
       {routes.map((route) => (
         <Link
           key={route.href}
