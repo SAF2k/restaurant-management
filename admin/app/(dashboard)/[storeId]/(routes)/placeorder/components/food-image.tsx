@@ -19,10 +19,10 @@ const FoodsItemImage = () => {
 
   return (
     <div>
-      <img
-        src={image}
-        loading={loading ? "lazy" : "eager"}
-        alt="food image"
+      <div
+        // src={image}
+        // loading={loading ? "lazy" : "eager"}
+        // alt="food image"
         className="w-[180px] h-[180px] rounded object-cover"
       />
     </div>

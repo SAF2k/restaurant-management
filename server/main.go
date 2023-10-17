@@ -26,7 +26,7 @@ func setupRouter() *gin.Engine {
 	router.Use(CorsMiddleware())
 
 	registerRoutes(router)
-	router.Use(gin.Logger())
+
 	return router
 }
 

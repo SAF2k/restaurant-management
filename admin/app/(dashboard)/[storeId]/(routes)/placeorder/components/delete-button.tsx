@@ -11,7 +11,8 @@ export function DeleteButton({ ID }: Props) {
 
   return (
     <Button
-        onClick={() => {
+      size={"icon"}
+      onClick={() => {
         remove(ID);
       }}
     >
@@ -25,12 +26,12 @@ export function DeleteAllButton() {
 
   return (
     <Button
-    variant={"destructive"}
+      variant={"destructive"}
       onClick={() => {
         removeAll();
       }}
     >
-      <span>Remove All</span>
+      <span className="mr-2">Remove All</span>
       <Trash size={18} />
     </Button>
   );

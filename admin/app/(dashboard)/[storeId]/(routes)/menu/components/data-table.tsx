@@ -37,8 +37,8 @@ export const CellAction = ({ data }: CellActionProps) => {
       setLoading(true);
       await axios.delete(
         `http://localhost:8080/menu/${data._id}`
-      );
-      router.refresh();
+      )
+      window.location.reload();
       router.push(`/${params.storeId}/menu`);
       toast.success("Menu deleted.");
     } catch (error: any) {

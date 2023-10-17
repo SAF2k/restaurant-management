@@ -46,25 +46,22 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
   const description = initialData ? "Edit a menu." : "Add a new menu";
   const toastMessage = initialData ? "Menu updated." : "Menu created.";
   const action = initialData ? "Save changes" : "Create";
-  
-const form = useForm<MenuFormValues>({
-  resolver: zodResolver(formSchema),
-  defaultValues: initialData
-    ? { ...initialData }
-    : {
-        category: "",
-        name: "",
-      },
-});
+
+  const form = useForm<MenuFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: initialData
+      ? { ...initialData }
+      : {
+          category: "",
+          name: "",
+        },
+  });
 
   const onSubmit = async (data: MenuFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(
-          `http://localhost:8080/menu/${params.menuId}`,
-          data
-        );
+        await axios.patch(`http://localhost:8080/menu/${params.menuId}`, data);
       } else {
         await axios.post(`http://localhost:8080/menu`, data);
       }
