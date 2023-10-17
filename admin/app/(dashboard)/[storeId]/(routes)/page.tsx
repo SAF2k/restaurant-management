@@ -11,7 +11,7 @@ export default function HomePage({ params }: { params: { storeId: string } }) {
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             <div className="flex items-center space-x-2">
               {/* <CalendarDateRangePicker /> */}
-              <Link href={`${params.storeId}/cart`}>
+              <Link href={`${params.storeId}/placeorder`}>
                 <Button>Place Orders</Button>
               </Link>
             </div>

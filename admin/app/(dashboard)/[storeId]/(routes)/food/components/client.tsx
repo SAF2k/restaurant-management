@@ -25,11 +25,12 @@ export const FoodClient = () => {
   const params = useParams();
   const router = useRouter();
 
-  const [foods, setFoods] = useState<FoodData[]>([]);
+  const [foods, setFoods] = useState<FoodClientProps[]>([]);
 
   useEffect(() => {
     const fetchMenuData = async () => {
-      const foodItems: FoodData[] | undefined = (await getAllFood()) ?? [];
+      const foodItems: FoodClientProps[] | undefined =
+        (await getAllFood()) ?? [];
 
       setFoods(foodItems);
     };
@@ -37,13 +38,15 @@ export const FoodClient = () => {
   }, []);
 
   const data: FoodClientProps[] = foods.map((item) => ({
-    _id: item.ID, // Use the correct property name
+    _id: item._id, // Use the correct property name
     name: item.name,
     price: item.price,
     food_id: item.food_id,
     menu_name: item.menu_name,
     created_at: format(new Date(item.created_at), "MMMM do, yyyy"),
   }));
+
+  console.log("data", data);
 
   return (
     <>

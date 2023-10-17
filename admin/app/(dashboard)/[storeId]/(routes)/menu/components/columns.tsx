@@ -7,7 +7,7 @@ import { MenuData } from "@/actions/get-menu";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<MenuData>[] = [
+const columns: ColumnDef<MenuData>[] = [
   {
     accessorKey: "category",
     header: "Category",
@@ -26,3 +26,6 @@ export const columns: ColumnDef<MenuData>[] = [
     header: "Action",
   },
 ];
+
+export default columns;
+

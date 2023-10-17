@@ -1,13 +1,13 @@
 import { FoodData, getFoodByMenu } from "@/actions/get-food";
-import FoodCard from "./item-card";
-
+import FoodCard from "./food-card";
+import { Separator } from "@/components/ui/separator";
 export interface FoodCartProps {
   ID: string;
   name: string;
   price: number;
 }
 
-export default async function ShowTest({ id }: { id: string }) {
+export default async function ShowItems({ id }: { id: string }) {
   const foodData: FoodData[] = await getFoodByMenu({ id });
 
   const food: FoodCartProps[] = foodData.map((item) => ({
@@ -17,14 +17,16 @@ export default async function ShowTest({ id }: { id: string }) {
   }));
 
   console.log("show item food", food);
-  
+
   return (
     <>
-      <h1 className="font-semibold text-2xl border-b pb-4 border-b-slate-700">
+      <h1 className="font-semibold text-2xl pb-4">
         Foods
       </h1>
 
-      <div className="text-sm pt-4 max-w-[70vw] flex gap-4 flex-wrap">
+      <Separator />
+
+      <div className="text-sm pt-4 lg:max-w-[70vw] flex gap-4 flex-wrap">
         {food.map((food, index) => (
           <div key={index}>
             <FoodCard foods={food} />

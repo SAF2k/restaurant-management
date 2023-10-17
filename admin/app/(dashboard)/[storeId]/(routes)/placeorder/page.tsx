@@ -1,10 +1,7 @@
-
-
 import { MenuData, getMenus } from "@/actions/get-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CartItems from "./components/cart-items";
-import ShowTest from "./components/show-items";
-import { useEffect, useState } from "react";
+import ShowItems from "./components/show-items";
 
 const PlaceOrderPage = async () => {
   const menuData: MenuData[] = await getMenus();
@@ -22,7 +19,7 @@ const PlaceOrderPage = async () => {
           </TabsList>
           {menuData.map((item) => (
             <TabsContent value={item._id} key={item._id}>
-              <ShowTest id={item._id} />
+              <ShowItems id={item._id} />
             </TabsContent>
           ))}
         </Tabs>

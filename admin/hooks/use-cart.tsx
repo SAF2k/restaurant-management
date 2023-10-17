@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import { FoodCartProps } from "@/app/(dashboard)/[storeId]/(routes)/placeorder/components/show-items";
 
-
 interface CartItem extends FoodCartProps {
   quantity: number;
 }
@@ -21,24 +20,40 @@ export const useCartStore = create<CartStore>((set, get) => ({
   add: (food: FoodCartProps) => {
     const { cart } = get();
     const existingItemIndex = cart.findIndex((item) => item.ID === food.ID);
-
-    console.log("existingItemIndex", existingItemIndex);
-    
-
     if (existingItemIndex !== -1) {
       // If the item already exists, increase its quantity
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity++;
       set({ cart: updatedCart });
+      toast.success("Item added to cart");
     } else {
       // If it's a new item, add it to the cart with quantity 1
       set({ cart: [...cart, { ...food, quantity: 1 }] });
+      toast.success("New Item added to cart");
     }
   },
   remove: (id: string) => {
     const { cart } = get();
-    const updatedCart = cart.filter((item) => item.ID !== id);
+    let itemRemoved = false;
+    const updatedCart = cart
+      .map((item) => {
+        if (itemRemoved || item.ID !== id) {
+          return item;
+        }
+        if (item.quantity > 1) {
+          itemRemoved = true;
+          toast.error(item.name + " removed");
+          return { ...item, quantity: item.quantity - 1 };
+        }
+        itemRemoved = true;
+        toast.error("All " + item.name + " removed");
+        return null;
+      })
+      .filter(Boolean) as CartItem[]; // Use type assertion here
     set({ cart: updatedCart });
   },
-  removeAll: () => set({ cart: [] }),
+  removeAll: () => {
+    toast.error("All items removed");
+    set({ cart: [] });
+  },
 }));

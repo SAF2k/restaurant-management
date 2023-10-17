@@ -13,12 +13,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MenuColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { MenuData } from "@/actions/get-menu";
 
 interface CellActionProps {
-  data: MenuColumn;
+  data: MenuData;
 }
 
 export const CellAction = ({ data }: CellActionProps) => {
@@ -36,7 +36,7 @@ export const CellAction = ({ data }: CellActionProps) => {
     try {
       setLoading(true);
       await axios.delete(
-        `http://localhost:8080/menu/${data.id}`
+        `http://localhost:8080/menu/${data._id}`
       );
       router.refresh();
       router.push(`/${params.storeId}/menu`);
@@ -68,14 +68,14 @@ export const CellAction = ({ data }: CellActionProps) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.id)}>
+          <DropdownMenuItem onClick={() => onCopy(data._id)}>
             <Copy className="w-4 h-4 mr-2" />
             Copy ID
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
               router.push(
-                `/${params.storeId}/menu/${data.id}`
+                `/${params.storeId}/menu/${data._id}`
               )
             }
           >
