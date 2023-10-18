@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"net/http"
 	"time"
@@ -39,6 +40,8 @@ func GetFoods() gin.HandlerFunc {
 			})
 			return
 		}
+
+		fmt.Println(allFoods)
 
 		c.JSON(http.StatusOK, allFoods)
 	}
@@ -139,14 +142,6 @@ func UpdateFood() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get food ID from URL parameter
 		foodID := c.Param("food_id")
-
-		// Check if food_id is empty or not provided
-		if foodID == "" {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "food_id is required",
-			})
-			return
-		}
 
 		// Define the filter to find the food by ID
 		filter := bson.M{"food_id": foodID}

@@ -17,7 +17,10 @@ interface IFoodByMenu {
 
 export const getAllFood = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/foods");
+    const response = await axios.get("http://localhost:8081/food");
+
+    // console.log("Response:", response.data);
+    
 
     // Check the response status to ensure it's successful (status code 200)
     if (response.status === 200) {
@@ -40,7 +43,7 @@ export const getAllFood = async () => {
 
 export const getFoodById = async (id: string) => {
   try {
-    const response = await axios.get("http://localhost:8080/food/" + id);
+    const response = await axios.get("http://localhost:8081/food/" + id);
     const data = response.data;
 
     return data;
@@ -55,7 +58,7 @@ export const getFoodByMenu = async ({
   id,
 }: IFoodByMenu): Promise<FoodData[]> => {
   try {
-    const response = await axios.get("http://localhost:8080/food/menu/" + id);
+    const response = await axios.get("http://localhost:8081/food/menu/" + id);
     const data = response.data;
 
     if (Array.isArray(data)) {

@@ -81,9 +81,9 @@ export const FoodForm: React.FC<FoodFormProps> = ({ initialData, menus }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`http://localhost:8080/food/${params.foodId}`, data);
+        await axios.patch(`http://localhost:8081/food/${params.foodId}`, data);
       } else {
-        await axios.post(`http://localhost:8080/food`, data);
+        await axios.post(`http://localhost:8081/food`, data);
       }
       router.refresh();
       router.push(`/${params.storeId}/food`);
@@ -98,7 +98,7 @@ export const FoodForm: React.FC<FoodFormProps> = ({ initialData, menus }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8080/food/${params.foodId}`);
+      await axios.delete(`http://localhost:8081/food/${params.foodId}`);
       router.refresh();
       router.push(`/${params.storeId}/food`);
       toast.success("Food deleted.");

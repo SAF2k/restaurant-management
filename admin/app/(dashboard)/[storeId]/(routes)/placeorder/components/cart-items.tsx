@@ -12,7 +12,7 @@ export default function CartItems() {
   const [tables, setTables] = useState<TableData[]>([]);
   const [activate, setActivate] = useState<boolean>(true);
   const cartData = useCartStore();
-  const cart = cartData.cart
+  const cart = cartData.cart;
 
   const total = cart.reduce((acc, item) => {
     return acc + item.price * item.quantity;
@@ -33,9 +33,6 @@ export default function CartItems() {
     };
     tableData();
   }, []);
-
-  console.log(cart.length);
-  
 
   return (
     <>

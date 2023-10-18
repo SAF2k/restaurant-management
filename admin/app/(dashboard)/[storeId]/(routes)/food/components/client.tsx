@@ -37,6 +37,9 @@ export const FoodClient = () => {
     fetchMenuData();
   }, []);
 
+  console.log(foods);
+  
+
   const data: FoodClientProps[] = foods.map((item) => ({
     _id: item._id, // Use the correct property name
     name: item.name,
@@ -46,7 +49,8 @@ export const FoodClient = () => {
     created_at: format(new Date(item.created_at), "MMMM do, yyyy"),
   }));
 
-  console.log("data", data);
+  console.log(foods);
+  
 
   return (
     <>

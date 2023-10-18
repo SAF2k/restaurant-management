@@ -22,3 +22,4 @@ const FoodPage = async ({ params }: { params: { foodId: string } }) => {
 };
 
 export default FoodPage;
+  

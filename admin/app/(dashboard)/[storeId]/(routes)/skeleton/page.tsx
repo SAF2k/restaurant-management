@@ -1,6 +1,23 @@
+"use client"
+
 import { Skeleton } from "@/components/ui/skeleton";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function SkeletonLoader() {
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get("/api/v2")
+      const data = res.data;
+      setData(data);
+    };
+    fetchData();
+  }, []);
+
+  console.log(data);
+  
   return (
     <>
       <div className="flex justify-between p-8  pt-6">
@@ -10,6 +27,7 @@ export default function SkeletonLoader() {
         </div>
         <Skeleton className="h-10 w-[120px] mt-2" />
       </div>
+      <h2>{data}</h2>
 
       <div className="p-8">
         <Skeleton className="h-10 w-[380px]" />
