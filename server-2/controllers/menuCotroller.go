@@ -63,7 +63,9 @@ func CreateMenu(ctx *fiber.Ctx) error {
 	menu := new(models.Menu)
 
 	//Parse body and validate
-	utils.ParseBodyAndValidate(ctx, menu)
+	if err := utils.ParseBodyAndValidate(ctx, menu); err != nil {
+		return err
+	}
 
 	menu.ID = primitive.NewObjectID()
 	menu.Menu_id = menu.ID.Hex()

@@ -87,7 +87,9 @@ func CreateFood(ctx *fiber.Ctx) error {
 	menu := new(models.Menu)
 
 	//Validate body
-	utils.ParseBodyAndValidate(ctx, food)
+	if err := utils.ParseBodyAndValidate(ctx, food); err != nil {
+		return err
+	}
 
 	//Find menu by menu id and store id
 	err := menuCollection.FindOne(ctx.Context(), bson.M{"menu_id": food.Menu_id, "store_id": storeId}).Decode(&menu)
@@ -138,7 +140,9 @@ func UpdateFood(ctx *fiber.Ctx) error {
 	}
 
 	//Validate body
-	utils.ParseBodyAndValidate(ctx, food)
+	if err := utils.ParseBodyAndValidate(ctx, food); err != nil {
+		return err
+	}
 
 	//Set updated_at
 	food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))

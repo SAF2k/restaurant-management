@@ -15,6 +15,7 @@ import (
 var storeCollection *mongo.Collection = database.OpenCollection(database.Client, "store")
 
 func GetAllStores(ctx *fiber.Ctx) error {
+	//Find all stores
 	result, err := storeCollection.Find(ctx.Context(), bson.M{})
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Could not connect to database")
@@ -25,7 +26,7 @@ func GetAllStores(ctx *fiber.Ctx) error {
 
 	//Decode all stores
 	if err := result.All(ctx.Context(), &stores); err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not find any menu")
+		return fiber.NewError(fiber.StatusInternalServerError, "Could not find any store")
 	}
 
 	//Return stores
@@ -42,7 +43,7 @@ func GetStore(ctx *fiber.Ctx) error {
 	//Find store and decode
 	err := storeCollection.FindOne(ctx.Context(), bson.M{"store_id": storeId}).Decode(&store)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Food not found")
+		return fiber.NewError(fiber.StatusInternalServerError, "Could not find store")
 	}
 
 	//Return store
@@ -54,11 +55,15 @@ func CreateStore(ctx *fiber.Ctx) error {
 	store := new(models.Store)
 
 	//Parse body and validate
-	utils.ParseBodyAndValidate(ctx, store)
+	if err := utils.ParseBodyAndValidate(ctx, store); err != nil {
+		return err
+	}
 
 	//Create bson.M type var
 	store.ID = primitive.NewObjectID()
 	store.Store_id = store.ID.Hex()
+
+	//Create created_at and updated_at
 	store.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 	store.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 
@@ -80,8 +85,11 @@ func UpdateStore(ctx *fiber.Ctx) error {
 	store := new(models.Store)
 
 	//Parse body and validate
-	utils.ParseBodyAndValidate(ctx, store)
+	if err := utils.ParseBodyAndValidate(ctx, store); err != nil {
+		return err
+	}
 
+	//Create update var
 	update := bson.M{
 		"$set": bson.M{
 			"name": store.Name,
