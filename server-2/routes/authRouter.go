@@ -7,7 +7,7 @@ import (
 )
 
 // AuthRoutes containes all the auth routes
-func AuthRoutes(app fiber.Router) {
+func AuthRoute(app fiber.Router) {
 
 	router := app.Group("/auth")
 

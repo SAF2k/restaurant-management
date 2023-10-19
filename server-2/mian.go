@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"restaurant-management/server-2/config"
 	"restaurant-management/server-2/routes"
+	"restaurant-management/server-2/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 func main() {
-	app := fiber.New()
-	app.Use(logger.New())
+	app := fiber.New(fiber.Config{
+		ErrorHandler: utils.ErrorHandler,
+	})
 
 	allowSites := config.ALLOW_SITES
 
@@ -23,8 +24,10 @@ func main() {
 		AllowOrigins:     allowSites,
 	}))
 
+	routes.AuthRoute(app)
+	routes.StoreRoute(app)
+	routes.MenuRoute(app)
 	routes.FoodRoutes(app)
-	routes.AuthRoutes(app)
 
 	app.Listen(fmt.Sprintf(":%v", config.PORT))
 }

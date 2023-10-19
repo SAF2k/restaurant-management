@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"restaurant-management/server-2/config"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,7 +12,8 @@ import (
 )
 
 func DBinstance() *mongo.Client {
-	MongoDb := "mongodb://localhost:27018"
+
+	MongoDb := config.MONGO_DB
 	fmt.Println("MongoDB Running on ", MongoDb)
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(MongoDb))

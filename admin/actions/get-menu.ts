@@ -9,7 +9,9 @@ export interface MenuData {
 
 export const getMenus = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/menus");
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/menus`
+    );
     const data = response.data;
 
     if (Array.isArray(data)) {
@@ -35,7 +37,9 @@ export const getMenus = async () => {
 
 export const getMenuById = async (id: string) => {
   try {
-    const response = await axios.get(`http://localhost:8080/menu/${id}`);
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/menu/${id}`
+    );
     const data = response.data;
 
     return data;

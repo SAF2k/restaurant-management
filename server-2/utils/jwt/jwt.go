@@ -7,12 +7,11 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // TokenPayload defines the payload for the token
 type TokenPayload struct {
-	ID primitive.ObjectID `bson:"_id"`
+	ID string `json:"user_id"`
 }
 
 // Generate generates the jwt token based on payload
@@ -28,7 +27,7 @@ func Generate(payload *TokenPayload) string {
 		"ID":  payload.ID,
 	})
 
-	token, err := t.SignedString([]byte(config.TOKENKEY))
+	token, err := t.SignedString([]byte(config.TOKEN_KEY))
 
 	if err != nil {
 		panic(err)
@@ -49,7 +48,7 @@ func parse(token string) (*jwt.Token, error) {
 		}
 
 		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
-		return []byte(config.TOKENKEY), nil
+		return []byte(config.TOKEN_KEY), nil
 	})
 }
 
@@ -68,12 +67,12 @@ func Verify(token string) (*TokenPayload, error) {
 	}
 
 	// Getting ID, it's an interface{} so I need to cast it to uint
-	id, ok := claims["ID"].(float64)
+	id, ok := claims["ID"].(string)
 	if !ok {
 		return nil, errors.New("something went wrong")
 	}
 
 	return &TokenPayload{
-		ID: primitive.NewObjectIDFromTimestamp(time.Unix(int64(id), 0)),
+		ID: id,
 	}, nil
 }

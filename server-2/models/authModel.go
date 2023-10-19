@@ -35,15 +35,23 @@ func (*LoginDTO) Value(key any) any {
 // SignupDTO defined the /login payload
 type SignupDTO struct {
 	LoginDTO
-	Name string `json:"name" validate:"required,min=3"`
+	User_id    *string   `json:"user_id"`
+	Name       string    `json:"name" validate:"required,min=3"`
+	Store_id   string    `json:"store_id" validate:"required"`
+	Created_at time.Time `json:"create_at"`
+	Updated_at time.Time `json:"update_at"`
 }
 
 // UserResponse todo
 type UserResponse struct {
-	ID       primitive.ObjectID `bson:"_id"`
-	Name     string             `json:"name"`
-	Email    string             `json:"email"`
-	Password string             `json:"-"`
+	ID         primitive.ObjectID `bson:"_id"`
+	User_id    string             `json:"-"`
+	Name       string             `json:"name"`
+	Email      string             `json:"email"`
+	Store_id   string             `json:"store_id"`
+	Password   string             `json:"-"`
+	Created_at time.Time          `json:"-"`
+	Updated_at time.Time          `json:"-"`
 }
 
 // AccessResponse todo

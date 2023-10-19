@@ -3,7 +3,6 @@ module restaurant-management/server-2
 go 1.21.1
 
 require (
-	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-playground/validator/v10 v10.15.5
 	github.com/gofiber/fiber/v2 v2.50.0
 	github.com/golang-jwt/jwt/v5 v5.0.0
@@ -39,5 +38,4 @@ require (
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 )
