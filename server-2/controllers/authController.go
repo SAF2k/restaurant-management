@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"restaurant-management/server-2/database"
 	"restaurant-management/server-2/models"
 	"restaurant-management/server-2/utils"
@@ -65,8 +64,6 @@ func Signup(ctx *fiber.Ctx) error {
 	if err := utils.ParseBodyAndValidate(ctx, b); err != nil {
 		return err
 	}
-
-	fmt.Println(b.Email)
 
 	// Check if email or store_id exists
 	if err := userCollection.FindOne(ctx.Context(), bson.M{"email": b.Email}).Err(); err == nil {

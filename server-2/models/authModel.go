@@ -38,13 +38,13 @@ type SignupDTO struct {
 	User_id    *string   `json:"user_id"`
 	Name       string    `json:"name" validate:"required,min=3"`
 	Store_id   string    `json:"store_id" validate:"required"`
-	Created_at time.Time `json:"create_at"`
-	Updated_at time.Time `json:"update_at"`
+	Created_at time.Time `json:"created_at"`
+	Updated_at time.Time `json:"updated_at"`
 }
 
 // UserResponse todo
 type UserResponse struct {
-	ID         primitive.ObjectID `bson:"_id"`
+	ID         primitive.ObjectID `bson:"-"`
 	User_id    string             `json:"-"`
 	Name       string             `json:"name"`
 	Email      string             `json:"email"`

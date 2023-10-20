@@ -1,10 +1,10 @@
 import { getMenuById } from "@/actions/get-menu";
 import { MenuForm } from "./components/menu-form";
 
-const MenuPage = async ({ params }: { params: { menuId: string } }) => {
+const MenuPage = async ({ params }: { params: { menuId: string, storeId: string } }) => {
   const menuData = async () => {
     if (params.menuId === "new") return null;
-    const data = await getMenuById(params.menuId);
+    const data = await getMenuById(params.menuId, params.storeId);
     return data;
   };
   const menu = await menuData();

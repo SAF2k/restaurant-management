@@ -1,4 +1,5 @@
 import NavBar from "@/components/navbar";
+import AuthProvider from "@/hooks/use-auth";
 // import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -14,9 +15,9 @@ export default async function DashboardLayout({
   // }
 
   return (
-    <>
-    <NavBar />
+    <AuthProvider>
+      <NavBar />
       {children}
-    </>
+    </AuthProvider>
   );
 }

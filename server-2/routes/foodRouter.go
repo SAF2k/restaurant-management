@@ -9,12 +9,12 @@ import (
 
 func FoodRoutes(app fiber.Router) {
 
-	router := app.Group("/food").Use(middleware.Auth)
+	router := app.Group("/food")
 
 	router.Get("/", controllers.GetAllFood)
 	router.Get("/:id", controllers.GetFood)
 	router.Get("/menu/:id", controllers.GetFoodByMenu)
-	router.Post("/", controllers.CreateFood)
-	router.Patch("/:id", controllers.UpdateFood)
-	router.Delete("/:id", controllers.DeleteFood)
+	router.Post("/", middleware.Auth, controllers.CreateFood)
+	router.Patch("/:id", middleware.Auth, controllers.UpdateFood)
+	router.Delete("/:id", middleware.Auth, controllers.DeleteFood)
 }

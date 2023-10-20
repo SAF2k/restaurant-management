@@ -9,14 +9,14 @@ import (
 
 func MenuRoute(app fiber.Router) {
 
-	router := app.Group("/:s_id/menu")
+	router := app.Group("/menu")
 
 	router.Get("/", controllers.GetAllMenus)
 	router.Get("/:id", controllers.GetMenu)
 	// router.Get("/:id/foods", controllers.GetFoodByMenu)
-	router.Post("/", controllers.CreateMenu).Use(middleware.Auth)
+	router.Post("/", middleware.Auth, controllers.CreateMenu)
 	// router.Post("/:id/foods", controllers.CreateFood)
-	// router.Put("/:id", controllers.UpdateMenu)
-	// router.Delete("/:id", controllers.DeleteMenu)
+	router.Patch("/:id", middleware.Auth, controllers.UpdateMenu)
+	router.Delete("/:id", middleware.Auth, controllers.DeleteMenu)
 	// router.Delete("/:id/foods", controllers.DeleteFoodByMenu)
 }

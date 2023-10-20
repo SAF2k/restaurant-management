@@ -39,6 +39,8 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
+  const storeId = params.storeId.toString()
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -61,15 +63,17 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`http://localhost:8080/menu/${params.menuId}`, data);
+        await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu/${params.menuId}`, data);
       } else {
-        await axios.post(`http://localhost:8080/menu`, data);
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu`, data);
       }
       router.refresh();
       router.push(`/${params.storeId}/menu`);
       toast.success(toastMessage);
     } catch (error: any) {
-      toast.error("Something went wrong.");
+      console.log(error.response.data.error);
+      
+      toast.error(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -78,7 +82,7 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8080/menu/${params.menuId}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu/${params.menuId}`);
       router.refresh();
       router.push(`/${params.storeId}/menu`);
       toast.success("Menu deleted.");

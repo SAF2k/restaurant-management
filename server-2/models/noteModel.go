@@ -11,6 +11,6 @@ type Note struct {
 	Text      *string            `json:"text" validate:"required,min=2,max=20"`
 	Title     *string            `json:"title"`
 	Note_id   string             `json:"note_id"`
-	Create_at time.Time          `json:"create_at"`
-	Update_at time.Time          `json:"update_at"`
+	Create_at time.Time          `json:"created_at"`
+	Update_at time.Time          `json:"updated_at"`
 }

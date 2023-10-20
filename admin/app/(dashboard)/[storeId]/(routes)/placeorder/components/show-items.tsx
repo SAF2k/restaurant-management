@@ -7,8 +7,8 @@ export interface FoodCartProps {
   price: number;
 }
 
-export default async function ShowItems({ id }: { id: string }) {
-  const foodData: FoodData[] = await getFoodByMenu({ id });
+export default async function ShowItems({ id, storeId }: { id: string, storeId: string }) {
+  const foodData: FoodData[] = await getFoodByMenu({ id, storeId });
 
   const food: FoodCartProps[] = foodData.map((item) => ({
     ID: item.ID,

@@ -12,12 +12,13 @@ export interface FoodData {
   quantity: number;
 }
 interface IFoodByMenu {
-  id: string;
+  id?: string;
+  storeId: string;
 }
 
-export const getAllFood = async () => {
+export const getAllFood = async ({storeId}: IFoodByMenu) => {
   try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/food`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/food`);
 
     // console.log("Response:", response.data);
 
@@ -40,10 +41,10 @@ export const getAllFood = async () => {
   }
 };
 
-export const getFoodById = async (id: string) => {
+export const getFoodById = async ({storeId,id}: IFoodByMenu) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/food/${id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/food/${id}`
     );
     const data = response.data;
 
@@ -56,11 +57,11 @@ export const getFoodById = async (id: string) => {
 };
 
 export const getFoodByMenu = async ({
-  id,
+  id,storeId
 }: IFoodByMenu): Promise<FoodData[]> => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/food/menu/${id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/food/menu/${id}`
     );
     const data = response.data;
 

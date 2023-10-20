@@ -27,18 +27,20 @@ export const FoodClient = () => {
 
   const [foods, setFoods] = useState<FoodClientProps[]>([]);
 
+  const storeId = params.storeId.toString();
+
   useEffect(() => {
     const fetchMenuData = async () => {
       const foodItems: FoodClientProps[] | undefined =
-        (await getAllFood()) ?? [];
+        (await getAllFood({storeId})) ?? [];
 
       setFoods(foodItems);
     };
     fetchMenuData();
-  }, []);
+  }, [ storeId ]);
 
   console.log(foods);
-  
+
 
   const data: FoodClientProps[] = foods.map((item) => ({
     _id: item._id, // Use the correct property name

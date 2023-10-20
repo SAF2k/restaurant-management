@@ -17,16 +17,16 @@ var foodCollection *mongo.Collection = database.OpenCollection(database.Client, 
 
 func GetAllFood(ctx *fiber.Ctx) error {
 	//Collect store id from params
-	// storeId := ctx.Params("s_id")
-
-	//Find all foods by store id
-	result, err := foodCollection.Find(ctx.Context(), bson.M{})
-	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not connect to database")
-	}
+	storeId := ctx.Params("s_id")
 
 	//Create food model
 	var foods []models.Food
+
+	//Find all foods by store id
+	result, err := foodCollection.Find(ctx.Context(), bson.M{"store_id": storeId})
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "No food found")
+	}
 
 	//Decode all foods
 	if err := result.All(ctx.Context(), &foods); err != nil {
@@ -102,8 +102,8 @@ func CreateFood(ctx *fiber.Ctx) error {
 	food.Store_id = menu.Store_id
 
 	//Set created_at and updated_at
-	food.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-	food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+	food.Created_at = time.Now()
+	food.Updated_at = time.Now()
 
 	//Create ID
 	food.ID = primitive.NewObjectID()
@@ -143,9 +143,6 @@ func UpdateFood(ctx *fiber.Ctx) error {
 	if err := utils.ParseBodyAndValidate(ctx, food); err != nil {
 		return err
 	}
-
-	//Set updated_at
-	food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 
 	// Create an update document with the $set operator
 	update := bson.M{

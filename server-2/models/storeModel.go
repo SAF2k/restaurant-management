@@ -8,9 +8,9 @@ import (
 
 type Store struct {
 	ID       primitive.ObjectID `bson:"_id"`
-	Store_id string             `json:"store_id" validate:"required"`
+	Store_id string             `json:"store_id"`
 	Name     *string            `json:"name" validate:"required"`
 
-	Created_at time.Time `json:"create_at"`
-	Updated_at time.Time `json:"update_at"`
+	Created_at time.Time `json:"created_at"`
+	Updated_at time.Time `json:"updated_at"`
 }

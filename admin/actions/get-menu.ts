@@ -7,10 +7,19 @@ export interface MenuData {
   created_at: string;
 }
 
-export const getMenus = async () => {
+interface IMenuByStore {
+  storeId: string;
+  id?: string;
+}
+
+export const getMenus = async ({storeId}: IMenuByStore) => {
+
+  console.log("storeId",storeId);
+  
+
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/menus`
+      `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu`
     );
     const data = response.data;
 
@@ -35,10 +44,10 @@ export const getMenus = async () => {
   }
 };
 
-export const getMenuById = async (id: string) => {
+export const getMenuById = async ({id, storeId }:IMenuByStore) => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/menu/${id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu/${id}`
     );
     const data = response.data;
 

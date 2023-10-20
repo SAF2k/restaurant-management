@@ -18,13 +18,15 @@ export const MenuClient = () => {
 
   const [menuData, setMenuData] = useState<MenuData[]>([]);
 
+  const storeId = params.storeId.toString()
+
   useEffect(() => {
     const fetchData = async () => {
-      const menuItems: MenuData[] | undefined = (await getMenus()) ?? [];
+      const menuItems: MenuData[] | undefined = (await getMenus(storeId)) ?? [];
       setMenuData(menuItems);
     };
     fetchData();
-  }, []);
+  }, [ storeId ]);
 
   const data: MenuData[] = menuData.map((item) => ({
     _id: item._id,

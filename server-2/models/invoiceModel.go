@@ -13,6 +13,6 @@ type Invoice struct {
 	Payment_method   *string            `json:"payment_method" validate:"eq=CARD|eq=CASH|eq="`
 	Payment_status   *string            `json:"payment_status" validate:"eq=PAID|eq=UNPAID|eq="`
 	Payment_due_date time.Time          `json:"payment_due_date"`
-	Create_at        time.Time          `json:"create_at"`
-	Update_at        time.Time          `json:"update_at"`
+	Create_at        time.Time          `json:"created_at"`
+	Update_at        time.Time          `json:"updated_at"`
 }
