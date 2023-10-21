@@ -49,9 +49,11 @@ export default function LoginPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
         values
       );
-      let cache = response.data;
 
+      console.log(response.data.auth.token);
       
+
+      localStorage.setItem("token", response.data.auth.token);
 
       toast.success(response.data.message);
       router.push("/home");
