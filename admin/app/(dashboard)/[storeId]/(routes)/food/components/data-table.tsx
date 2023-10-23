@@ -15,10 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { FoodClientProps } from "./client";
+import { FoodData } from "@/actions/get-food";
 
 interface CellActionProps {
-  data: FoodClientProps;
+  data: FoodData;
 }
 
 export const CellAction = ({ data }: CellActionProps) => {
@@ -36,7 +36,9 @@ export const CellAction = ({ data }: CellActionProps) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8080/food/${data._id}`);
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/${params.storeId}/food/${data.ID}`
+      );
       router.refresh();
       router.push(`/${params.storeId}/food`);
       toast.success("product deleted.");
@@ -67,13 +69,13 @@ export const CellAction = ({ data }: CellActionProps) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data._id)}>
+          <DropdownMenuItem onClick={() => onCopy(data.ID)}>
             <Copy className="w-4 h-4 mr-2" />
             Copy ID
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/food/${data._id}`)
+              router.push(`/${params.storeId}/food/${data.ID}`)
             }
           >
             <Edit className="w-4 h-4 mr-2" />

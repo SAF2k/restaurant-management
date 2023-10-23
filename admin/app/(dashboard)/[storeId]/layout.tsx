@@ -15,9 +15,11 @@ export default async function DashboardLayout({
   // }
 
   return (
-    <AuthProvider>
+    // <AuthProvider>
+    // </AuthProvider>
+    <>
       <NavBar />
       {children}
-    </AuthProvider>
+    </>
   );
 }

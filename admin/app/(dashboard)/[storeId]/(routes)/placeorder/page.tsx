@@ -5,6 +5,8 @@ import ShowItems from "./components/show-items";
 
 const PlaceOrderPage = async (params: { params: { storeId: string } }) => {
   const storeId = params.params.storeId.toString();
+  console.log("storeId", storeId);
+  
   const menuData: MenuData[] = await getMenus({ storeId });
 
   console.log("menuData", menuData);

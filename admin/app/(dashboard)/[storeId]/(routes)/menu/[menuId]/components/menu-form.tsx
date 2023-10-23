@@ -39,7 +39,7 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
-  const storeId = params.storeId.toString()
+  const storeId = params.storeId.toString();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -63,16 +63,26 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu/${params.menuId}`, data);
+        await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu/${params.menuId}`,
+          data
+        );
       } else {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu`, data);
+        const options = {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          Credential: "include",
+          data: data,
+          url: `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu`,
+        };
+        await axios(options);
       }
       router.refresh();
       router.push(`/${params.storeId}/menu`);
       toast.success(toastMessage);
     } catch (error: any) {
       console.log(error.response.data.error);
-      
+
       toast.error(error.response.data.error);
     } finally {
       setLoading(false);
@@ -82,7 +92,9 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu/${params.menuId}`);
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu/${params.menuId}`
+      );
       router.refresh();
       router.push(`/${params.storeId}/menu`);
       toast.success("Menu deleted.");

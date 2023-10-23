@@ -61,13 +61,13 @@ export const FoodForm: React.FC<FoodFormProps> = ({ initialData, menus }) => {
   const defaultValues = initialData
     ? {
         name: initialData.name,
-        image_url: initialData.food_image,
+        food_image: initialData.food_image,
         price: initialData.price,
         menu_id: initialData.menu_id,
       }
     : {
         name: "",
-        image_url: "",
+        food_image: "",
         price: 0,
         menu_id: "",
       };
@@ -81,9 +81,15 @@ export const FoodForm: React.FC<FoodFormProps> = ({ initialData, menus }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`http://localhost:8081/food/${params.foodId}`, data);
+        await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_URL}/${params.storeId}/food/${params.foodId}`,
+          data
+        );
       } else {
-        await axios.post(`http://localhost:8081/food`, data);
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/${params.storeId}/food`,
+          data
+        );
       }
       router.refresh();
       router.push(`/${params.storeId}/food`);
@@ -98,7 +104,9 @@ export const FoodForm: React.FC<FoodFormProps> = ({ initialData, menus }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8081/food/${params.foodId}`);
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/${params.storeId}/food/${params.foodId}`
+      );
       router.refresh();
       router.push(`/${params.storeId}/food`);
       toast.success("Food deleted.");

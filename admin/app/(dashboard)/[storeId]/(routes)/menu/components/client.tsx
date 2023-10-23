@@ -22,7 +22,7 @@ export const MenuClient = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const menuItems: MenuData[] | undefined = (await getMenus(storeId)) ?? [];
+      const menuItems: MenuData[] | undefined = (await getMenus({storeId})) ?? [];
       setMenuData(menuItems);
     };
     fetchData();

@@ -105,3 +105,17 @@ func UpdateStore(ctx *fiber.Ctx) error {
 	//Return result
 	return ctx.JSON(result)
 }
+
+func DeleteStore(ctx *fiber.Ctx) error {
+	//Get id from params
+	storeId := ctx.Params("id")
+
+	//Delete store from database
+	result, err := storeCollection.DeleteOne(ctx.Context(), bson.M{"store_id": storeId})
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Could not delete store")
+	}
+
+	//Return result
+	return ctx.JSON(result)
+}

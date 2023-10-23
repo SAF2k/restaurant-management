@@ -12,47 +12,31 @@ import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { FoodData, getAllFood } from "@/actions/get-food";
 
-export interface FoodClientProps {
-  _id: string;
-  name: string;
-  price: number;
-  food_id: string;
-  menu_name: string;
-  created_at: string;
-}
-
 export const FoodClient = () => {
   const params = useParams();
   const router = useRouter();
-
-  const [foods, setFoods] = useState<FoodClientProps[]>([]);
-
   const storeId = params.storeId.toString();
+
+  const [foods, setFoods] = useState<FoodData[]>([]);
 
   useEffect(() => {
     const fetchMenuData = async () => {
-      const foodItems: FoodClientProps[] | undefined =
-        (await getAllFood({storeId})) ?? [];
+      const foodItems: FoodData[] | undefined =
+        (await getAllFood({ storeId })) ?? [];
 
       setFoods(foodItems);
     };
     fetchMenuData();
-  }, [ storeId ]);
+  }, [storeId]);
 
-  console.log(foods);
-
-
-  const data: FoodClientProps[] = foods.map((item) => ({
-    _id: item._id, // Use the correct property name
+  const data: FoodData[] = foods.map((item) => ({
+    ID: item.ID,
     name: item.name,
     price: item.price,
     food_id: item.food_id,
     menu_name: item.menu_name,
     created_at: format(new Date(item.created_at), "MMMM do, yyyy"),
   }));
-
-  console.log(foods);
-  
 
   return (
     <>

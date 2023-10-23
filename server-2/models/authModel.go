@@ -45,7 +45,7 @@ type SignupDTO struct {
 // UserResponse todo
 type UserResponse struct {
 	ID         primitive.ObjectID `bson:"-"`
-	User_id    string             `json:"-"`
+	User_id    string             `json:"user_id"`
 	Name       string             `json:"name"`
 	Email      string             `json:"email"`
 	Store_id   string             `json:"store_id"`

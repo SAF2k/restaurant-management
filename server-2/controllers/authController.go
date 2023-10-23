@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"restaurant-management/server-2/database"
 	"restaurant-management/server-2/models"
 	"restaurant-management/server-2/utils"
@@ -119,4 +120,42 @@ func Signup(ctx *fiber.Ctx) error {
 			Token: t,
 		},
 	})
+}
+
+func GetUser(ctx *fiber.Ctx) error {
+
+	user := ctx.Locals("USER")
+
+	fmt.Println(user)
+
+	// // create a user response
+	// user := &models.UserResponse{}
+
+	// // check if email exists
+	// err := userCollection.FindOne(ctx.Context(), bson.M{"user_id": user_id}).Decode(user)
+	// if err != nil {
+	// 	return fiber.NewError(fiber.StatusInternalServerError, "Could not connect to database")
+	// }
+
+	return ctx.JSON(user)
+}
+
+func GetAllUsers(ctx *fiber.Ctx) error {
+	// get user id from params
+	store_id := ctx.Params("store_id")
+
+	// create a user response
+	users := []*models.UserResponse{}
+
+	// check if email exists
+	cursor, err := userCollection.Find(ctx.Context(), bson.M{"store_id": store_id})
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Could not connect to database")
+	}
+
+	if err = cursor.All(ctx.Context(), &users); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Could not connect to database")
+	}
+
+	return ctx.JSON(users)
 }

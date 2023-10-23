@@ -25,7 +25,6 @@ export const useCartStore = create<CartStore>((set, get) => ({
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity++;
       set({ cart: updatedCart });
-      toast.success("Item added to cart");
     } else {
       // If it's a new item, add it to the cart with quantity 1
       set({ cart: [...cart, { ...food, quantity: 1 }] });
@@ -42,7 +41,6 @@ export const useCartStore = create<CartStore>((set, get) => ({
         }
         if (item.quantity > 1) {
           itemRemoved = true;
-          toast.error(item.name + " removed");
           return { ...item, quantity: item.quantity - 1 };
         }
         itemRemoved = true;

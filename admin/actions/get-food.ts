@@ -5,11 +5,10 @@ export interface FoodData {
   name: string;
   price: number;
   food_id: string;
-  menu_id: string;
+  menu_id?: string;
   menu_name: string;
-  food_image: string;
+  food_image?: string;
   created_at: string;
-  quantity: number;
 }
 interface IFoodByMenu {
   id?: string;

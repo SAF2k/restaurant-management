@@ -2,15 +2,24 @@ import { getFoodById } from "@/actions/get-food";
 import { FoodForm } from "./components/food-form";
 import { getMenus } from "@/actions/get-menu";
 
-const FoodPage = async ({ params }: { params: { foodId: string } }) => {
-  const foodData = async () => {
-    if (params.foodId === "new") return null;
-    const food = await getFoodById(params.foodId);
-    return food;
-  };
-  const menus = await getMenus();
+const FoodPage = async ({
+  params,
+}: {
+  params: { foodId: string; storeId: string };
+}) => {
+  const id = params.foodId.toString();
+  const storeId = params.storeId.toString();
 
-  const food = await foodData();
+  // const foodData = async () => {
+  //   if (id === "new") return null;
+  //   console.log(id);
+
+  //   const food = await getFoodById({ storeId });
+  //   return food;
+  // };
+  const menus = await getMenus({ storeId });
+
+  const food = params.foodId === "new" ? null : await getFoodById({ id,storeId });
 
   return (
     <div className="flex-col">
@@ -22,4 +31,3 @@ const FoodPage = async ({ params }: { params: { foodId: string } }) => {
 };
 
 export default FoodPage;
-  

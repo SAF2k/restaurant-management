@@ -14,5 +14,5 @@ func StoreRoute(app fiber.Router) {
 	router.Get("/:id", controllers.GetStore)
 	router.Post("/", controllers.CreateStore)
 	router.Patch("/:id", controllers.UpdateStore)
-	// router.Delete("/:id", controllers.DeleteStore)
+	router.Delete("/:id", controllers.DeleteStore)
 }
