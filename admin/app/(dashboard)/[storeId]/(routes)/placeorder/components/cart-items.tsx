@@ -8,7 +8,7 @@ import ConfirmButton from "./confirm-button";
 import { useEffect, useState } from "react";
 import { TableData, getAllTable } from "@/actions/get-table";
 
-export default function CartItems() {
+export default function CartItems({storeId} : {storeId: string}) {
   const [tables, setTables] = useState<TableData[]>([]);
   const [activate, setActivate] = useState<boolean>(true);
   const cartData = useCartStore();
@@ -28,11 +28,11 @@ export default function CartItems() {
 
   useEffect(() => {
     const tableData = async () => {
-      const res = await getAllTable();
+      const res = await getAllTable({storeId});
       setTables(res);
     };
     tableData();
-  }, []);
+  }, [storeId]);
 
   return (
     <>

@@ -38,6 +38,7 @@ interface TableFormProps {
 export const TableForm: React.FC<TableFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
+  const storeId = params.storeId.toString();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -67,11 +68,14 @@ export const TableForm: React.FC<TableFormProps> = ({ initialData }) => {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `http://localhost:8080/table/${params.tableId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/table/${params.tableId}`,
           data
         );
       } else {
-        await axios.post(`http://localhost:8080/table`, data);
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/table`,
+          data
+        );
       }
       router.refresh();
       router.push(`/${params.storeId}/table`);

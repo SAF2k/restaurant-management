@@ -36,7 +36,7 @@ const PlaceOrderPage = async (params: { params: { storeId: string } }) => {
               ))}
             </Tabs>
           </div>
-          <CartItems />
+          <CartItems storeId={storeId}/>
         </>
       )}
     </div>

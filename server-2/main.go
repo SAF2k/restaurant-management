@@ -40,4 +40,5 @@ func setupRoutes(app *fiber.App) {
 
 	routes.MenuRoute(api)
 	routes.FoodRoutes(api)
+	routes.TableRoute(api)
 }

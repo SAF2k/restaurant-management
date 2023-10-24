@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TableColumn } from "./columns";
 import { Button } from "@/components/ui/button";
+import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
   data: TableColumn;
@@ -22,6 +23,7 @@ interface CellActionProps {
 export const CellAction = ({ data }: CellActionProps) => {
   const router = useRouter();
   const params = useParams();
+  const storeId = params.storeId.toString();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,7 @@ export const CellAction = ({ data }: CellActionProps) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8080/table/${data.id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/${storeId}/menu`);
       router.refresh();
       router.push(`/${params.storeId}/table`);
     } catch (error: any) {
@@ -46,6 +48,12 @@ export const CellAction = ({ data }: CellActionProps) => {
 
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        loading={loading}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"ghost"} className="h-8 w-8 p-0">
@@ -60,9 +68,7 @@ export const CellAction = ({ data }: CellActionProps) => {
             Copy ID
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() =>
-              router.push(`/${params.storeId}/table/${data.id}`)
-            }
+            onClick={() => router.push(`/${params.storeId}/table/${data.id}`)}
           >
             <Edit className="w-4 h-4 mr-2" />
             Update

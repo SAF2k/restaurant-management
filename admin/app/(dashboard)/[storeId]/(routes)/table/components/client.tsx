@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {  columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { TableData, getAllTable } from "@/actions/get-table";
@@ -15,24 +15,25 @@ import { useEffect, useState } from "react";
 export const TableClient = () => {
   const params = useParams();
   const router = useRouter();
+  const storeId = params.storeId.toString();
 
   const [tables, setTables] = useState<TableData[]>([]);
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const tableItems: TableData[] = (await getAllTable()) ?? [];
+      const tableItems: TableData[] = (await getAllTable({ storeId })) ?? [];
 
       setTables(tableItems);
     };
     fetchTableData();
-  }, []);
+  }, [storeId]);
 
-   const data = tables.map((item) => ({
-     id: item._id,
-     tableNumber: item.table_number,
-     numberOfGuests: item.number_of_guests,
-     createdAt: format(new Date(item.created_at), "MMMM do, yyyy"),
-   }));
+  const data = tables.map((item) => ({
+    id: item.table_id,
+    tableNumber: item.table_number,
+    numberOfGuests: item.number_of_guests,
+    createdAt: format(new Date(item.created_at), "MMMM do, yyyy"),
+  }));
 
   return (
     <>
