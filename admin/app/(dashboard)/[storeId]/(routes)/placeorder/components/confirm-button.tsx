@@ -51,7 +51,7 @@ export default function ConfirmButton({
                 <SelectContent>
                   <SelectGroup>
                     {tables.map((item) => (
-                      <SelectItem key={item._id} value={item._id}>
+                      <SelectItem key={item.table_id} value={item.table_id}>
                         {item.table_number}
                       </SelectItem>
                     ))}
