@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
 
 export default function ConfirmButton({
   tables,
@@ -26,9 +27,16 @@ export default function ConfirmButton({
   tables: TableData[];
   activate: boolean;
 }) {
+  const [tableId, setTableId] = useState<string>("");
+  console.log(tableId);
+  const onSubmit = () => {
+    console.log("submit");
+  };
+
   return (
     <>
       <Dialog>
+        <form ></form>
         <DialogTrigger asChild>
           <Button disabled={activate}>Continue Order</Button>
         </DialogTrigger>
@@ -61,7 +69,7 @@ export default function ConfirmButton({
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Place Order</Button>
+            <Button onClick={onSubmit}>Place Order</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
