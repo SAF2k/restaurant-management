@@ -2,9 +2,10 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./data-table";
-import { FoodClientProps } from "./client";
+import { FoodData } from "@/actions/get-food";
 
-export const columns: ColumnDef<FoodClientProps>[] = [
+
+export const columns: ColumnDef<FoodData>[] = [
   {
     accessorKey: "name",
     header: "Name",
