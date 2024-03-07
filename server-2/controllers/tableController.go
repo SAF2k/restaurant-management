@@ -29,7 +29,6 @@ func GetAllTables(ctx *fiber.Ctx) error {
 	if err := result.All(ctx.Context(), &tables); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Could not find any table")
 	}
-	fmt.Println(tables)
 
 	return ctx.JSON(tables)
 }
