@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"https://github.com/SAF2k/restaurant-management/server/database"
-	"https://github.com/SAF2k/restaurant-management/server/models"
 	"math"
 
+	"github.com/SAF2k/restaurant-management/database"
+	"github.com/SAF2k/restaurant-management/models"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"gorm.io/gorm"

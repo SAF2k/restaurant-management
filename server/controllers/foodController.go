@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"encoding/hex"
-	"https://github.com/SAF2k/restaurant-management/server/database"
-	"https://github.com/SAF2k/restaurant-management/server/models"
-	"https://github.com/SAF2k/restaurant-management/server/utils"
 	"time"
 
+	"github.com/SAF2k/restaurant-management/database"
+	"github.com/SAF2k/restaurant-management/models"
+	"github.com/SAF2k/restaurant-management/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -76,7 +76,7 @@ func GetFoodByMenu(ctx *fiber.Ctx) error {
 func CreateFood(ctx *fiber.Ctx) error {
 
 	// Collect store id from params
-	storeId := ctx.Params("s_id")
+	// storeId := ctx.Params("s_id")
 
 	//Create new instance of food and menu model
 	food := new(models.Food)

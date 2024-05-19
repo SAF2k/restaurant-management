@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"https://github.com/SAF2k/restaurant-management/server/config"
-	"https://github.com/SAF2k/restaurant-management/server/routes"
-	"https://github.com/SAF2k/restaurant-management/server/utils"
 
+	"github.com/SAF2k/restaurant-management/config"
+	"github.com/SAF2k/restaurant-management/routes"
+	"github.com/SAF2k/restaurant-management/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"

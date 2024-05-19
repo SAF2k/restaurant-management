@@ -3,9 +3,10 @@ package jwt
 import (
 	"errors"
 	"fmt"
-	"https://github.com/SAF2k/restaurant-management/server/config"
+
 	"time"
 
+	"github.com/SAF2k/restaurant-management/config"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -16,7 +17,7 @@ type TokenPayload struct {
 
 // Generate generates the jwt token based on payload
 func Generate(payload *TokenPayload) string {
-	v, err := time.ParseDuration(config.TOKENEXP)
+	v, err := time.ParseDuration(config.TOKEN_EXP)
 
 	if err != nil {
 		panic("Invalid time duration. Should be time.ParseDuration string")

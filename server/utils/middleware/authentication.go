@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"fmt"
-	"https://github.com/SAF2k/restaurant-management/server/database"
-	"https://github.com/SAF2k/restaurant-management/server/models"
-	"https://github.com/SAF2k/restaurant-management/server/utils/jwt"
+
 	"strings"
 
+	"github.com/SAF2k/restaurant-management/database"
+	"github.com/SAF2k/restaurant-management/models"
+	"github.com/SAF2k/restaurant-management/utils/jwt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

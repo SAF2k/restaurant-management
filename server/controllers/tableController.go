@@ -2,11 +2,12 @@ package controllers
 
 import (
 	"encoding/hex"
-	"https://github.com/SAF2k/restaurant-management/server/database"
-	"https://github.com/SAF2k/restaurant-management/server/models"
-	"https://github.com/SAF2k/restaurant-management/server/utils"
+
 	"time"
 
+	"github.com/SAF2k/restaurant-management/database"
+	"github.com/SAF2k/restaurant-management/models"
+	"github.com/SAF2k/restaurant-management/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"gorm.io/gorm"

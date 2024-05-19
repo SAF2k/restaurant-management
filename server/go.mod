@@ -1,4 +1,4 @@
-module restaurant-management/server
+module github.com/SAF2k/restaurant-management
 
 go 1.21.1
 

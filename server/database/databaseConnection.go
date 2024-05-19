@@ -2,10 +2,10 @@ package database
 
 import (
 	"fmt"
-	"https://github.com/SAF2k/restaurant-management/server/config"
-	"https://github.com/SAF2k/restaurant-management/server/models"
 	"log"
 
+	"github.com/SAF2k/restaurant-management/config"
+	"github.com/SAF2k/restaurant-management/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

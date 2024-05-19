@@ -18,7 +18,7 @@ var (
 	// TOKENEXP returns the jwt token expiration duration.
 	// Should be time.ParseDuration string. Source: https://golang.org/pkg/time/#ParseDuration
 	// default: 10h
-	TOKENEXP = getEnv("TOKEN_EXP", "10h")
+	TOKEN_EXP = getEnv("TOKEN_EXP", "10h")
 	// ALLOW_SITES returns the allowed sites for CORS
 	ALLOW_SITES = getEnv("ALLOW_SITES", "")
 
