@@ -21,64 +21,37 @@ func DBMariainstance() *gorm.DB {
 		dbUser, dbPassword, dbHost, dbPort, dbName)
 	fmt.Println("MariaDB Running on ", dsn)
 
-	//Connects to DB
+	// Connect to the database
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	// Auto-migrate the Food schema
-	if err := db.AutoMigrate(&models.Food{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-	fmt.Println("Auto-migrate the Food schema" + "\t\t[OK]")
+	// Auto-migrate schemas
+	autoMigrateSchemas(db)
 
-	// Auto-migrate the Invoice schema
-	if err := db.AutoMigrate(&models.Invoice{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-
-	fmt.Println("Auto-migrate the Invoice schema" + "\t\t[OK]")
-
-	// Auto-migrate the Menu schema
-	if err := db.AutoMigrate(&models.Menu{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-
-	fmt.Println("Auto-migrate the Menu schema" + "\t\t[OK]")
-	// Auto-migrate the Note schema
-	if err := db.AutoMigrate(&models.Note{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-
-	fmt.Println("Auto-migrate the Note schema" + "\t\t[OK]")
-	// Auto-migrate the OrderItem schema
-	if err := db.AutoMigrate(&models.OrderItem{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-
-	fmt.Println("Auto-migrate the OrderItem schema" + "\t\t[OK]")
-	// Auto-migrate the Order schema
-	if err := db.AutoMigrate(&models.Order{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-
-	fmt.Println("Auto-migrate the Order schema" + "\t\t[OK]")
-	// Auto-migrate the Store schema
-	if err := db.AutoMigrate(&models.Store{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-
-	fmt.Println("Auto-migrate the Store schema" + "\t\t[OK]")
-
-	// Auto-migrate the Table schema
-	if err := db.AutoMigrate(&models.Table{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
-	}
-
-	fmt.Println("Auto-migrate the Table schema" + "\t\t[OK]")
 	fmt.Println("Database connected successfully!")
 	return db
+}
+
+func autoMigrateSchemas(db *gorm.DB) {
+	schemas := []interface{}{
+		&models.Food{},
+		&models.Invoice{},
+		&models.Menu{},
+		&models.Note{},
+		&models.OrderItem{},
+		&models.Order{},
+		&models.Store{},
+		&models.Table{},
+	}
+
+	for _, schema := range schemas {
+		if err := db.AutoMigrate(schema); err != nil {
+			log.Fatalf("Failed to auto-migrate schema %T: %v", schema, err)
+		}
+		fmt.Printf("Auto-migrate schema %T\t\t[OK]\n", schema)
+	}
 }
 
 var Client *gorm.DB = DBMariainstance()

@@ -23,9 +23,9 @@ func main() {
 
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
-		// AllowHeaders:     "Origin, Content-Type, Accept",
-		AllowMethods: "GET, POST, PUT, DELETE, PATCH",
-		AllowOrigins: allowSites,
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowMethods:     "GET, POST, PUT, DELETE, PATCH",
+		AllowOrigins:     allowSites,
 	}))
 
 	setupRoutes(app)
