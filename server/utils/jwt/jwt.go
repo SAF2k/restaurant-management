@@ -6,7 +6,8 @@ import (
 
 	"time"
 
-	"github.com/SAF2k/restaurant-management/config"
+	"github.com/SAF2k/restaurant-management/server/config"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 

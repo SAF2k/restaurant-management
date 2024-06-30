@@ -1,7 +1,8 @@
 package routes
 
 import (
-	"github.com/SAF2k/restaurant-management/controllers"
+	"github.com/SAF2k/restaurant-management/server/controllers"
+
 	"github.com/gofiber/fiber/v2"
 )
 

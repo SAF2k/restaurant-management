@@ -5,9 +5,10 @@ import (
 
 	"strings"
 
-	"github.com/SAF2k/restaurant-management/database"
-	"github.com/SAF2k/restaurant-management/models"
-	"github.com/SAF2k/restaurant-management/utils/jwt"
+	"github.com/SAF2k/restaurant-management/server/database"
+	"github.com/SAF2k/restaurant-management/server/models"
+	"github.com/SAF2k/restaurant-management/server/utils/jwt"
+
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,7 +17,7 @@ import (
 
 // var userCollection *mongo.Collection = database.OpenCollection(database.Client, "user")
 
-var userCollection *gorm.DB = database.OpenTable(database.Client, "user")
+var userCollection *gorm.DB = database.OpenTable("user")
 
 // // Auth is the authentication middleware
 func Auth(c *fiber.Ctx) error {

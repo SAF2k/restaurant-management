@@ -3,8 +3,9 @@ package utils
 import (
 	"math"
 
-	"github.com/SAF2k/restaurant-management/database"
-	"github.com/SAF2k/restaurant-management/models"
+	"github.com/SAF2k/restaurant-management/server/database"
+	"github.com/SAF2k/restaurant-management/server/models"
+
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 
 // // Create a new User type
 // var userCollection *mongo.Collection = database.OpenCollection(database.Client, "user")
-var userCollection *gorm.DB = database.OpenTable(database.Client, "user")
+var userCollection *gorm.DB = database.OpenTable("user")
 
 // ParseBody is helper function for parsing the body.
 // Is any error occurs it will panic.
