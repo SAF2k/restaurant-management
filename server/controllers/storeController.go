@@ -4,100 +4,106 @@ import (
 	"encoding/hex"
 	"time"
 
-	"github.com/SAF2k/restaurant-management/database"
-	"github.com/SAF2k/restaurant-management/models"
-	"github.com/SAF2k/restaurant-management/utils"
+	"github.com/SAF2k/restaurant-management/server/helper"
+	"github.com/SAF2k/restaurant-management/server/models"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
-var storeCollection *gorm.DB = database.OpenTable(database.Client, "stores")
-
-// GetAllStores - Fetch all stores
 func GetAllStores(ctx *fiber.Ctx) error {
-	var stores []models.Store
 
-	result := storeCollection.Find(&stores)
-	if result.Error != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not connect to database")
+	// Find all store
+	stores, err := helper.GetAllStoresFromDB()
+	if err != nil {
+		return ctx.JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-
 	return ctx.JSON(stores)
+
 }
 
-// GetStore - Fetch a single store by ID
 func GetStore(ctx *fiber.Ctx) error {
-	storeID := ctx.Params("id")
-	var store models.Store
 
-	result := storeCollection.Where("store_id = ?", storeID).First(&store)
-	if result.Error != nil {
-		if result.Error == gorm.ErrRecordNotFound {
-			return fiber.NewError(fiber.StatusNotFound, "Store not found")
-		}
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not find store")
+	// Collect store ID from params
+	storeId := ctx.Params("id")
+
+	// Find store using store ID
+	store, err := helper.GetStoreFromDB(storeId)
+	if err != nil {
+		return ctx.JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-
 	return ctx.JSON(store)
+
 }
 
-// CreateStore - Create a new store
 func CreateStore(ctx *fiber.Ctx) error {
+
 	store := new(models.Store)
 
-	if err := utils.ParseBodyAndValidate(ctx, store); err != nil {
-		return err
-	}
-
+	// Generate a new UUID (Universally Unique Identifier)
 	storeID := uuid.New()
+
+	// Convert UUID to string and assign it to StoreID
 	store.StoreID = hex.EncodeToString(storeID[:])
+
+	// Set ID with the UUID
 	store.ID = storeID
+
+	// Set created_at and updated_at
 	now := time.Now()
 	store.CreatedAt = now
 	store.UpdatedAt = now
 
-	if err := storeCollection.Create(store).Error; err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not create store")
+	// Insert store
+	if err := helper.CreateStoreInDB(store); err != nil {
+		return ctx.JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-
 	return ctx.JSON(store)
+
 }
 
-// UpdateStore - Update an existing store
 func UpdateStore(ctx *fiber.Ctx) error {
-	storeID := ctx.Params("id")
-	var store models.Store
 
-	if err := ctx.BodyParser(&store); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
-	}
+	// Collect store ID from params
+	storeID := ctx.Params("id")
+
+	store := &models.Store{}
 
 	update := map[string]interface{}{
-		"name":       store.Name,
-		"updated_at": time.Now(),
+		"name": store.Name,
 	}
 
-	result := storeCollection.Model(&models.Store{}).Where("store_id = ?", storeID).Updates(update)
-	if result.Error != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not update store")
+	// Update store
+	if err := helper.UpdateStoreInDB(storeID, update); err != nil {
+		return ctx.JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-
 	return ctx.JSON(store)
+
 }
 
-// DeleteStore - Delete a store by ID
 func DeleteStore(ctx *fiber.Ctx) error {
+
+	// Collect store ID from params
 	storeID := ctx.Params("id")
 
-	result := storeCollection.Where("store_id = ?", storeID).Delete(&models.Store{})
-	if result.Error != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not delete store")
+	// Delete store
+	rowsAffected, err := helper.DeleteStoreFromDB(storeID)
+	if err != nil {
+		return ctx.JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-
 	response := map[string]interface{}{
-		"store deleted successfully": result.RowsAffected,
+		"store deleted successfully": rowsAffected,
 	}
-
 	return ctx.JSON(response)
+
 }

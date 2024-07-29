@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/SAF2k/restaurant-management/config"
-	"github.com/SAF2k/restaurant-management/routes"
-	"github.com/SAF2k/restaurant-management/utils"
+	"github.com/SAF2k/restaurant-management/server/config"
+	"github.com/SAF2k/restaurant-management/server/routes"
+	"github.com/SAF2k/restaurant-management/server/utils"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -23,9 +24,9 @@ func main() {
 
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
-		AllowHeaders:     "Origin, Content-Type, Accept",
-		AllowMethods:     "GET, POST, PUT, DELETE, PATCH",
-		AllowOrigins:     allowSites,
+		// AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowMethods: "GET, POST, PUT, DELETE, PATCH",
+		AllowOrigins: allowSites,
 	}))
 
 	setupRoutes(app)

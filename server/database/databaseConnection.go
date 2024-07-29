@@ -4,38 +4,39 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/SAF2k/restaurant-management/config"
-	"github.com/SAF2k/restaurant-management/models"
+	"github.com/SAF2k/restaurant-management/server/config"
+	"github.com/SAF2k/restaurant-management/server/models"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-func DBMariainstance() *gorm.DB {
-	dbUser := config.DB_USER
-	dbPassword := config.DB_PASSWORD
-	dbHost := config.DB_HOST
-	dbPort := config.DB_PORT
-	dbName := config.DB_NAME
+var (
+	dbUser     = config.DB_USER
+	dbPassword = config.DB_PASSWORD
+	dbHost     = config.DB_HOST
+	dbPort     = config.DB_PORT
+	dbName     = config.DB_NAME
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		dbUser, dbPassword, dbHost, dbPort, dbName)
-	fmt.Println("MariaDB Running on ", dsn)
 
-	// Connect to the database
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
+	Client *gorm.DB
+)
 
-	// Auto-migrate schemas
-	autoMigrateSchemas(db)
-
-	fmt.Println("Database connected successfully!")
-	return db
+func init() {
+	Client = DBMariainstance()
 }
 
-func autoMigrateSchemas(db *gorm.DB) {
-	schemas := []interface{}{
+// DBMariainstance initializes and returns a database connection
+func DBMariainstance() *gorm.DB {
+	fmt.Println("MariaDB Running on ", dsn)
+
+	// Connects to DB
+	db := OpenDB()
+
+	// Auto-migrate schemas
+	modelsToMigrate := []interface{}{
 		&models.Food{},
 		&models.Invoice{},
 		&models.Menu{},
@@ -46,16 +47,36 @@ func autoMigrateSchemas(db *gorm.DB) {
 		&models.Table{},
 	}
 
-	for _, schema := range schemas {
-		if err := db.AutoMigrate(schema); err != nil {
-			log.Fatalf("Failed to auto-migrate schema %T: %v", schema, err)
+	for _, model := range modelsToMigrate {
+		if err := db.AutoMigrate(model); err != nil {
+			log.Fatalf("Failed to auto-migrate database schema for %T: %v", model, err)
 		}
-		fmt.Printf("Auto-migrate schema %T\t\t[OK]\n", schema)
+		fmt.Printf("Auto-migrate the %T schema\t\t[OK]\n", model)
 	}
+
+	fmt.Println("Connected to DB and Auto-migrated all the tables successfully!")
+	return db
 }
 
-var Client *gorm.DB = DBMariainstance()
+func OpenDB() *gorm.DB {
+	// Connects to DB
+	cred, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	return cred
+}
 
-func OpenTable(db *gorm.DB, tableName string) *gorm.DB {
-	return db.Table(tableName)
+// CloseDB closes the database connection
+func CloseDB(db *gorm.DB) error {
+	sqlDB, err := db.DB()
+	if err != nil {
+		return err
+	}
+	return sqlDB.Close()
+}
+
+// OpenTable returns a DB instance for the specified table
+func OpenTable(tableName string) *gorm.DB {
+	return Client.Table(tableName)
 }
